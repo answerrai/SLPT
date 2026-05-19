@@ -4,7 +4,7 @@
 
 [![License](https://img.shields.io/badge/license-Apache_2.0-blue.svg)](LICENSE)
 [![Spec Version](https://img.shields.io/badge/spec-v1.0-green.svg)](spec/SLPT-AIQ-v1.0.md)
-[![DOI](https://zenodo.org/badge/20297510.svg)](https://doi.org/10.5281/zenodo.20297510)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20297510.svg)](https://doi.org/10.5281/zenodo.20297510)
 
 ---
 
