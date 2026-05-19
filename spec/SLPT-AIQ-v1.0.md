@@ -24,7 +24,7 @@ direction-setting under ambiguity, and synthesis across conflicting information.
 
 SLPT provides a standardized vocabulary and data schema for platforms, institutions,
 and employers to measure and verify these behaviors consistently — enabling the
-emergence of the AIQ (Artificial Intelligence Quotient) as a portable, trusted
+emergence of the **AIQ™ (Artificial Intelligence Quotient)** as a portable, trusted
 credential for the AI economy.
 
 This specification covers: (1) the definition of qualifying learning events in AI
