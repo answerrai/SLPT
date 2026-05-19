@@ -111,7 +111,7 @@ layer is a platform responsibility governed by §7.1 of the specification.
 
 **Q: What are the two credential tiers?**
 
-A: AIQ Learner shows a proficiency band across the five SLPT dimensions —
+A: AIQ™ Learner shows a proficiency band across the five SLPT dimensions —
 from Initializing through to Frontier — and is issued and signed by
 Answer Labs Inc. AIQ Certified shows an exact AIQ credential across all
 five dimensions and is issued and signed by Answer Labs Inc., with the
