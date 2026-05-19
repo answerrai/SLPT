@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/answerrai/SLPT/schema/lpr_v1.0.0.json",
+  "title": "SLPT Learning Provenance Record",
+  "description": "Standard Learning Provenance Record for AIQ credential issuance and verification. Contains derived scores and credential metadata. Conforms to SLPT-AIQ-v1.0 §6. See https://github.com/answerrai/SLPT for the specification.",
+  "type": "object",
+  "required": [
+    "record_id",
+    "record_version",
+    "platform_id",
+    "session_id",
+    "timestamp_utc",
+    "context_type",
+    "context_id",
+    "verified_context",
+    "query_text_hash",
+    "dimension_scores",
+    "credential_tier",
+    "context_filter_passed"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "record_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Globally unique identifier for this LPR instance."
+    },
+    "record_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "SLPT specification version (e.g., '1.0.0')."
+    },
+    "platform_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128,
+      "description": "Identifier of the SLPT-compliant platform generating this record."
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Session identifier linking related events."
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp of event completion."
+    },
+    "context_type": {
+      "type": "string",
+      "enum": ["TUTOR", "ASSISTANT", "QUIZ", "RESEARCH", "ASSIGNMENT", "REFLECTION"],
+      "description": "Learning context classification. See §5.3."
+    },
+    "context_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier of the specific tutor, assistant, or quiz instance. See §5.3."
+    },
+    "institution_id": {
+      "type": ["string", "null"],
+      "default": null,
+      "description": "Issuing institution identifier. Null for self-verified learners."
+    },
+    "verified_context": {
+      "type": "boolean",
+      "description": "True if event occurred within an institutionally configured context. See §7.1."
+    },
+    "query_text_hash": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$",
+      "description": "SHA-256 hash of the query text. Enables tamper detection without exposing content. See §6.1."
+    },
+    "dimension_scores": {
+      "type": "object",
+      "description": "Derived per-dimension scores for this event. These are outputs of the scoring pipeline. See §9.",
+      "required": [
+        "jq",
+        "qo",
+        "dt",
+        "sa",
+        "lv",
+        "signal_confidence",
+        "computation_method"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "jq": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Judgment Quality score for this event."
+        },
+        "qo": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Question Originality score for this event."
+        },
+        "dt": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Discernment and Taste score for this event."
+        },
+        "sa": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Synthesis Under Ambiguity score for this event."
+        },
+        "lv": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Learning Velocity and Adaptability score for this event."
+        },
+        "signal_confidence": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Confidence weight applied to this event in the AIQ weighted average. See §9.1."
+        },
+        "computation_method": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Opaque identifier of the scoring model version used. Enables audit traceability without exposing methodology. See §3 Principle 5."
+        }
+      }
+    },
+    "skills_demonstrated": {
+      "type": ["array", "null"],
+      "items": { "type": "string" },
+      "default": null,
+      "description": "Array of skill taxonomy IDs demonstrated in this event."
+    },
+    "outcomes_evidenced": {
+      "type": ["array", "null"],
+      "items": { "type": "string" },
+      "default": null,
+      "description": "Array of learning outcome IDs evidenced in this event."
+    },
+    "context_filter_passed": {
+      "type": "boolean",
+      "description": "True if all mandatory context filter criteria in §7.1 were satisfied."
+    },
+    "credential_tier": {
+      "type": "string",
+      "enum": ["AIQ_LEARNER", "AIQ_CERTIFIED"],
+      "description": "Credential tier under which this event was recorded. AIQ_LEARNER: issued and co-signed by Answer Labs Inc. AIQ_CERTIFIED: co-signed by Answer Labs Inc. and institutional partner."
+    },
+    "session_event_index": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "default": null,
+      "description": "1-indexed position of this event within its session."
+    },
+    "llm_provider": {
+      "type": ["string", "null"],
+      "default": null,
+      "description": "Which LLM provider served this interaction."
+    },
+    "aiq_contribution": {
+      "type": ["object", "null"],
+      "default": null,
+      "additionalProperties": false,
+      "properties": {
+        "weighted_composite": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 100.0,
+          "description": "Weighted composite contribution of this event to the AIQ credential score."
+        },
+        "validity_window": {
+          "type": "string",
+          "enum": ["CURRENT", "HISTORICAL", "PROVISIONAL"],
+          "description": "Validity window classification for this event's contribution."
+        }
+      }
+    },
+    "record_integrity": {
+      "type": ["object", "null"],
+      "default": null,
+      "description": "Tamper-evident fields for integrity verification.",
+      "additionalProperties": false,
+      "properties": {
+        "internal_record_hash": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$",
+          "description": "SHA-256 hash of the corresponding internal LPR. Enables integrity verification without exposing internal content."
+        },
+        "issuer_signature": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Optional platform-level digital signature over this record."
+        }
+      }
+    },
+    "metadata": {
+      "type": ["object", "null"],
+      "additionalProperties": { "type": "string" },
+      "default": null,
+      "description": "Implementation-defined extension metadata."
+    }
+  }
+}
