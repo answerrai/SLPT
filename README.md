@@ -190,7 +190,7 @@ Answerr is certified or compliant with the following frameworks:
 If you reference SLPT in academic work, please cite both the specification and the underlying empirical foundation:
 
 ```
-Undheim, T. A., & Malik, M. Qaiser. (2026). SLPT — Standard Learning Provenance Taxonomy
+Undheim, T. A., Malik, M. Qaiser, Hashmi, N. (2026). SLPT — Standard Learning Provenance Taxonomy
 for AI-Mediated Education, v1.0. Answer Labs Inc. DOI pending.
 
 Malik, M. Qaiser., & Undheim, T. A. (2025). AI infrastructure for trust and learning in
