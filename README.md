@@ -94,12 +94,12 @@ Query text is SHA-256-hashed. The plaintext never enters the record. The full LP
 
 SLPT supports two credential tiers, both issued by Answer Labs Inc.:
 
-- **AIQ Learner** — awarded to any learner who meets the minimum activity
+- **AIQ™ Learner** — awarded to any learner who meets the minimum activity
   threshold on the Answerr platform. Shows a proficiency band across the
   five SLPT dimensions — from Initializing through to Frontier. Signed by
   Answer Labs Inc.
 
-- **AIQ Certified** — a co-signed credential issued jointly by Answer Labs Inc.
+- **AIQ™ Certified** — a co-signed credential issued jointly by Answer Labs Inc.
   and the learner's institution or employer once they are an active Answerr
   partner. Shows an exact score across all five SLPT dimensions. Carries
   institutional authority alongside the Answer Labs Inc. signature.
@@ -119,7 +119,7 @@ the dimension scoring engine and the institutional co-signature infrastructure.
 This section explains why.
 
 **Why scoring is hosted.** The scoring layer translates raw behavioral signals
-into dimension scores and the AIQ credential. The hosted-service model
+into dimension scores and the AIQ™ credential. The hosted-service model
 allows scoring logic to improve continuously without invalidating previously
 issued credentials. This is the same pattern used by major model APIs: the
 inference improves over time, the contract stays stable.
@@ -127,7 +127,7 @@ inference improves over time, the contract stays stable.
 **Why this is still open.** SLPT is an open standard — not a proprietary
 product. Publishing the specification allows universities, employers, and
 developers to build on a common framework, reference it in academic work,
-and trust that AIQ credentials mean the same thing regardless of which
+and trust that AIQ™ credentials mean the same thing regardless of which
 institution issued them. The scoring implementation is hosted by Answer
 Labs Inc. The standard itself belongs to the community.
 
