@@ -17,7 +17,7 @@ Initial public release.
 - Five permanent dimensions: Judgment Quality, Question Originality,
   Discernment & Taste, Synthesis Under Ambiguity, and Learning Velocity &
   Adaptability.
-- Two credential tiers: AIQ Learner and AIQ Certified.
+- Two credential tiers: AIQ™ Learner and AIQ™ Certified.
 - Seven core principles (§3): behavioral evidence only, longitudinal validity,
   context integrity, dimensional permanence, transparent methodology, learner
   data sovereignty, anti-inflation.
