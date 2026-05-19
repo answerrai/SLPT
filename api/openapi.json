@@ -1,0 +1,255 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AIQ Credential API",
+    "version": "1.0.0",
+    "description": "Answer Labs Inc. AIQ credential scoring API. Available to institutional partners on request. Contact tech@answerr.ai to discuss access.",
+    "contact": {
+      "email": "tech@answerr.ai"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.answerr.ai/AIQ",
+      "description": "Production — available to institutional partners on request"
+    }
+  ],
+  "paths": {
+    "/v1/slpt/aiq": {
+      "post": {
+        "summary": "Score a learner session and generate an AIQ credential",
+        "description": "Accepts institutional configuration and session data. Returns a scored AIQ credential across the five SLPT dimensions.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AIQRequest"
+              },
+              "example": {
+                "university_id": "institution_001",
+                "api_key": "••••••••••••••••",
+                "config": {
+                  "weights": {
+                    "JQ": "configurable",
+                    "QO": "configurable",
+                    "DT": "configurable",
+                    "SA": "configurable",
+                    "LV": "configurable"
+                  },
+                  "token_thresholds": {
+                    "learner": "configurable",
+                    "certified": "configurable"
+                  },
+                  "passing_scores": {
+                    "learner": "configurable",
+                    "certified": "configurable"
+                  },
+                  "lock_period_days": 90,
+                  "branding": {
+                    "institution_name": "Institution name",
+                    "logo_url": "https://..."
+                  }
+                },
+                "session": {
+                  "student_id": "stu_4821",
+                  "course_id": "CS401",
+                  "tokens_used": 62400
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "AIQ credential successfully generated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIQResponse"
+                },
+                "example": {
+                  "credential_tier": "AIQ_LEARNER",
+                  "aiq_credential": 64,
+                  "dimension_scores": {
+                    "JQ": 71,
+                    "QO": 58,
+                    "DT": 62,
+                    "SA": 69,
+                    "LV": 55
+                  },
+                  "proficiency_band": "Developing",
+                  "credential_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                  "issued_at": "2026-05-19T02:30:00Z",
+                  "valid_until": "2026-08-19T02:30:00Z",
+                  "institution_name": "Institution name",
+                  "methodology_id": "SLPT-AIQ-v1.0-hosted"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request — missing required fields or malformed payload"
+          },
+          "401": {
+            "description": "Unauthorized — invalid or missing API key"
+          },
+          "403": {
+            "description": "Forbidden — institution not authorized for this endpoint"
+          },
+          "429": {
+            "description": "Rate limit exceeded"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AIQRequest": {
+        "type": "object",
+        "required": ["university_id", "api_key", "config", "session"],
+        "properties": {
+          "university_id": {
+            "type": "string",
+            "description": "Unique identifier for the institution or enterprise partner."
+          },
+          "api_key": {
+            "type": "string",
+            "description": "API key generated from the Answerr educator dashboard."
+          },
+          "config": {
+            "type": "object",
+            "description": "Institutional configuration for this scoring request.",
+            "required": ["weights", "token_thresholds", "passing_scores", "lock_period_days", "branding"],
+            "properties": {
+              "weights": {
+                "type": "object",
+                "description": "Dimension weights configurable at the institutional level. Contact tech@answerr.ai to discuss configuration.",
+                "properties": {
+                  "JQ": { "type": "string", "description": "Judgment Quality weight — configurable" },
+                  "QO": { "type": "string", "description": "Question Originality weight — configurable" },
+                  "DT": { "type": "string", "description": "Discernment and Taste weight — configurable" },
+                  "SA": { "type": "string", "description": "Synthesis Under Ambiguity weight — configurable" },
+                  "LV": { "type": "string", "description": "Learning Velocity weight — configurable" }
+                }
+              },
+              "token_thresholds": {
+                "type": "object",
+                "description": "Minimum token usage thresholds for each credential tier. Configurable by institutional partners.",
+                "properties": {
+                  "learner": { "type": "string", "description": "Token threshold for AIQ Learner — configurable" },
+                  "certified": { "type": "string", "description": "Token threshold for AIQ Certified — configurable" }
+                }
+              },
+              "passing_scores": {
+                "type": "object",
+                "description": "Minimum passing scores for each credential tier. Configurable by institutional partners.",
+                "properties": {
+                  "learner": { "type": "string", "description": "Passing score for AIQ Learner — configurable" },
+                  "certified": { "type": "string", "description": "Passing score for AIQ Certified — configurable" }
+                }
+              },
+              "lock_period_days": {
+                "type": "integer",
+                "description": "Number of days a credential is locked before re-assessment is permitted."
+              },
+              "branding": {
+                "type": "object",
+                "description": "Institutional branding applied to issued credentials.",
+                "properties": {
+                  "institution_name": {
+                    "type": "string",
+                    "description": "Full name of the institution or enterprise partner."
+                  },
+                  "logo_url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "URL of the institution logo for credential display."
+                  }
+                }
+              }
+            }
+          },
+          "session": {
+            "type": "object",
+            "description": "Session data for the learner being scored.",
+            "required": ["student_id", "course_id", "tokens_used"],
+            "properties": {
+              "student_id": {
+                "type": "string",
+                "description": "Platform-internal student identifier."
+              },
+              "course_id": {
+                "type": "string",
+                "description": "Identifier of the course or programme this session belongs to."
+              },
+              "tokens_used": {
+                "type": "integer",
+                "description": "Total tokens used by this learner in this session."
+              }
+            }
+          }
+        }
+      },
+      "AIQResponse": {
+        "type": "object",
+        "properties": {
+          "credential_tier": {
+            "type": "string",
+            "enum": ["AIQ_LEARNER", "AIQ_CERTIFIED"],
+            "description": "Credential tier awarded to the learner."
+          },
+          "aiq_credential": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Composite AIQ credential score across the five SLPT dimensions."
+          },
+          "dimension_scores": {
+            "type": "object",
+            "description": "Individual scores across the five SLPT dimensions.",
+            "properties": {
+              "JQ": { "type": "number", "minimum": 0, "maximum": 100, "description": "Judgment Quality score" },
+              "QO": { "type": "number", "minimum": 0, "maximum": 100, "description": "Question Originality score" },
+              "DT": { "type": "number", "minimum": 0, "maximum": 100, "description": "Discernment and Taste score" },
+              "SA": { "type": "number", "minimum": 0, "maximum": 100, "description": "Synthesis Under Ambiguity score" },
+              "LV": { "type": "number", "minimum": 0, "maximum": 100, "description": "Learning Velocity score" }
+            }
+          },
+          "proficiency_band": {
+            "type": "string",
+            "enum": ["Initializing", "Base", "Developing", "Capable", "Advanced", "Frontier"],
+            "description": "Proficiency band label for AIQ Learner credentials."
+          },
+          "credential_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier for the issued credential."
+          },
+          "issued_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "UTC timestamp of credential issuance."
+          },
+          "valid_until": {
+            "type": "string",
+            "format": "date-time",
+            "description": "UTC timestamp of credential expiry based on lock_period_days."
+          },
+          "institution_name": {
+            "type": "string",
+            "description": "Name of the co-signing institution or enterprise partner."
+          },
+          "methodology_id": {
+            "type": "string",
+            "description": "Identifier of the scoring methodology version used. See §3 Principle 5 of the SLPT specification."
+          }
+        }
+      }
+    }
+  }
+}
