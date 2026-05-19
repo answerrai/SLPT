@@ -45,9 +45,9 @@ This means:
 - Grades and completion data pass back automatically into your gradebook
 - No separate login or platform switching required for learners
 
-### AIQ credentials
+### AIQ™ credentials
 
-Every learner on the Answerr platform generates an AIQ credential
+Every learner on the Answerr platform generates an AIQ™ credential
 automatically as they interact with AI. Two tiers are available:
 
 - **AIQ Learner** — issued and co-signed by Answer Labs Inc. Shows a
