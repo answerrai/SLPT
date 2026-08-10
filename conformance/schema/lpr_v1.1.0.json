@@ -1,0 +1,599 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/answerrai/SLPT/schema/lpr_v1.1.0.json",
+  "title": "SLPT Learning Provenance Record",
+  "description": "Standard Learning Provenance Record v1.1. Records the provenance of a learner-AI interaction, not of a learner's knowledge. Conforms to SLPT-AIQ-v1.1 \u00a76.",
+  "type": "object",
+  "required": [
+    "record_id",
+    "record_version",
+    "platform_id",
+    "session_id",
+    "timestamp_utc",
+    "context_type",
+    "context_id",
+    "verified_context",
+    "query_text_hash",
+    "dimension_estimates",
+    "score_status",
+    "intended_use",
+    "use_authorization_status",
+    "scoring_model",
+    "delegation_annotation",
+    "dispute_status",
+    "learner_access",
+    "credential_tier",
+    "context_filter_passed"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "record_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Globally unique identifier for this LPR instance."
+    },
+    "record_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "SLPT specification version (e.g., '1.0.0')."
+    },
+    "platform_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128,
+      "description": "Identifier of the SLPT-compliant platform generating this record."
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Session identifier linking related events."
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp of event completion."
+    },
+    "context_type": {
+      "type": "string",
+      "enum": [
+        "TUTOR",
+        "ASSISTANT",
+        "QUIZ",
+        "RESEARCH",
+        "ASSIGNMENT",
+        "REFLECTION"
+      ],
+      "description": "Learning context classification. See \u00a75.3."
+    },
+    "context_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier of the specific tutor, assistant, or quiz instance. See \u00a75.3."
+    },
+    "institution_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": null,
+      "description": "Issuing institution identifier. Null for self-verified learners."
+    },
+    "verified_context": {
+      "type": "boolean",
+      "description": "True if event occurred within an institutionally configured context. See \u00a77.1."
+    },
+    "query_text_hash": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$",
+      "description": "SHA-256 hash of the query text. Enables tamper detection without exposing content. See \u00a76.1."
+    },
+    "context_filter_passed": {
+      "type": "boolean",
+      "description": "True if all mandatory context filter criteria in \u00a77.1 were satisfied."
+    },
+    "dimension_estimates": {
+      "oneOf": [
+        {
+          "type": "object",
+          "description": "Dimension estimates. Nullable: a record may be structurally conformant while declining to assert a measurement.",
+          "required": [
+            "jq",
+            "qo",
+            "sa",
+            "signal_confidence",
+            "computation_method",
+            "sod",
+            "ad"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "jq": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Judgment Quality score for this event."
+            },
+            "qo": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Question Originality score for this event."
+            },
+            "sa": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Synthesis Under Ambiguity score for this event."
+            },
+            "signal_confidence": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Confidence weight applied to this event in the AIQ weighted average. See \u00a79.1."
+            },
+            "computation_method": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Opaque identifier of the scoring model version used. Enables audit traceability without exposing methodology. See \u00a73 Principle 5."
+            },
+            "sod": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Discernment and Taste score for this event."
+            },
+            "ad": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Learning Velocity and Adaptability score for this event."
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Dimension estimates, or null where no measurement is asserted."
+    },
+    "score_status": {
+      "type": "string",
+      "enum": [
+        "validated",
+        "provisional",
+        "synthetic_example_not_validated"
+      ],
+      "description": "Status of the values in dimension_estimates."
+    },
+    "intended_use": {
+      "type": "string",
+      "enum": [
+        "formative_feedback",
+        "research",
+        "summative_assessment",
+        "credentialing"
+      ],
+      "description": "What this record is for."
+    },
+    "use_authorization_status": {
+      "type": "string",
+      "enum": [
+        "prohibited",
+        "unvalidated",
+        "conditionally_authorized",
+        "authorized"
+      ],
+      "description": "Whether the intended use is authorized. Authorization is a property of a specified interpretation for a specified population, not of the instrument."
+    },
+    "validation_status": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "validation_evidence_uri": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "validation_population": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "validation_context": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "description": "Validation evidence supporting the declared use. Null where none exists."
+    },
+    "scoring_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "digest",
+        "calibration_epoch",
+        "weight_config_id",
+        "weight_config_version",
+        "weight_config_digest"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-fA-F0-9]{64}$"
+        },
+        "calibration_epoch": {
+          "type": "string",
+          "description": "Interaction epoch the model was calibrated against. Estimates from different epochs are not longitudinally comparable."
+        },
+        "model_description_uri": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "weight_config_id": {
+          "type": "string"
+        },
+        "weight_config_version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "weight_config_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-fA-F0-9]{64}$"
+        },
+        "conformance_suite_version": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "default": null
+        },
+        "inference_timestamp_utc": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "default": null
+        },
+        "evaluation_report_uri": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "default": null
+        },
+        "stated_limitations_uri": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "default": null
+        },
+        "change_log_uri": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "default": null
+        }
+      },
+      "description": "Traceability by reference. A digest proves artifact identity, not that the service executed the model described. Weighting is configured per institution; scores under different configurations are not comparable across institutions."
+    },
+    "task_frame": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "pedagogical_purpose": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "permitted_ai_actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "prohibited_ai_actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "required_learner_actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "evidence_expected_after_delegation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "description": "Instructor-declared task frame. Changes the evidential meaning of delegation; does not settle it."
+    },
+    "delegation_annotation": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "episode_scoped",
+        "state"
+      ],
+      "properties": {
+        "episode_scoped": {
+          "const": true
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "consistent_with_task_frame",
+            "inconsistent_with_task_frame",
+            "not_assessable"
+          ]
+        },
+        "evidence_basis": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "learner_actions_before": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "learner_actions_after": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Episode-level heuristic signal. Does not determine how cognition was distributed and does not modify dimension estimates."
+    },
+    "dispute_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state"
+      ],
+      "description": "Contest state. Window is 30 days from score generation. Fields beyond state are populated only once a dispute is raised.",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "none",
+            "open",
+            "upheld",
+            "rejected",
+            "expired"
+          ]
+        },
+        "raised_at_utc": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "default": null,
+          "description": "When the learner raised the dispute. Null where state is none."
+        },
+        "adjudicator": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "answer_labs",
+            "institution",
+            null
+          ],
+          "default": null,
+          "description": "Answer Labs adjudicates scoring-model defects; the institution adjudicates course-level consequences."
+        },
+        "trace_available_for_review": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "description": "Whether the interaction trace still existed when the dispute was adjudicated. False after the 30-day retention window, in which case the remedies are invalidation and reassessment rather than re-scoring."
+        }
+      }
+    },
+    "learner_access": {
+      "type": "boolean",
+      "description": "Whether the learner can access this record."
+    },
+    "credential_tier": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "AIQ_LEARNER",
+        "AIQ_CERTIFIED",
+        null
+      ],
+      "description": "Credential issued on operator authority. Developmental: no academic credit, no accreditation body, no completed validation study. Null where none issued."
+    }
+  },
+  "allOf": [
+    {
+      "$comment": "R1 \u2014 summative and credentialing use cannot be asserted as authorized in v1.1.",
+      "if": {
+        "properties": {
+          "intended_use": {
+            "enum": [
+              "summative_assessment",
+              "credentialing"
+            ]
+          }
+        },
+        "required": [
+          "intended_use"
+        ]
+      },
+      "then": {
+        "properties": {
+          "use_authorization_status": {
+            "enum": [
+              "prohibited",
+              "unvalidated"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "$comment": "R2 \u2014 authorization requires an attached validation_status object.",
+      "if": {
+        "properties": {
+          "use_authorization_status": {
+            "enum": [
+              "conditionally_authorized",
+              "authorized"
+            ]
+          }
+        },
+        "required": [
+          "use_authorization_status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "validation_status": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "validation_status"
+        ]
+      }
+    },
+    {
+      "$comment": "R3 \u2014 a delegation state relative to a task frame requires a task frame.",
+      "if": {
+        "properties": {
+          "delegation_annotation": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "consistent_with_task_frame",
+                  "inconsistent_with_task_frame"
+                ]
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        },
+        "required": [
+          "delegation_annotation"
+        ]
+      },
+      "then": {
+        "properties": {
+          "task_frame": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    {
+      "$comment": "R4 \u2014 a learner cannot contest a record they cannot read.",
+      "if": {
+        "properties": {
+          "dispute_status": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "open",
+                  "upheld",
+                  "rejected",
+                  "expired"
+                ]
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        },
+        "required": [
+          "dispute_status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "learner_access": {
+            "const": true
+          }
+        }
+      }
+    }
+  ]
+}
