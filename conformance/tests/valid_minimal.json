@@ -1,0 +1,48 @@
+{
+  "record_id": "9c2e1a6f-3b8d-4f47-a1e7-2c8b9d0e5f30",
+  "record_version": "1.1.0",
+  "platform_id": "answerr_v3.2",
+  "session_id": "sess_b51e2c",
+  "timestamp_utc": "2026-05-19T14:32:18Z",
+  "context_type": "RESEARCH",
+  "context_id": "research_workspace_42",
+  "institution_id": "babson_college",
+  "verified_context": true,
+  "query_text_hash": "495b651357ec3680b88c57810ceee9bf05a1ddd0553b1e62e7e7a1f5977d22ea",
+  "dimension_estimates": {
+    "jq": null,
+    "qo": null,
+    "sod": null,
+    "sa": null,
+    "ad": null,
+    "signal_confidence": null,
+    "computation_method": "answerlabs_scorer_v1.1.0"
+  },
+  "score_status": "synthetic_example_not_validated",
+  "intended_use": "formative_feedback",
+  "use_authorization_status": "prohibited",
+  "validation_status": null,
+  "scoring_model": {
+    "id": "answerlabs_scorer",
+    "version": "1.1.0",
+    "digest": "sha256:495b651357ec3680b88c57810ceee9bf05a1ddd0553b1e62e7e7a1f5977d22ea",
+    "calibration_epoch": "2026-H1",
+    "model_description_uri": null,
+    "weight_config_id": "babson_default",
+    "weight_config_version": "1.0.0",
+    "weight_config_digest": "sha256:495b651357ec3680b88c57810ceee9bf05a1ddd0553b1e62e7e7a1f5977d22ea"
+  },
+  "task_frame": null,
+  "delegation_annotation": {
+    "episode_scoped": true,
+    "state": "not_assessable",
+    "evidence_basis": null,
+    "confidence": null
+  },
+  "dispute_status": {
+    "state": "none"
+  },
+  "learner_access": true,
+  "context_filter_passed": true,
+  "credential_tier": null
+}
