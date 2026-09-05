@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+title: >-
+  SLPT — Standard Learning Provenance Taxonomy for AI-mediated
+  education
+message: >-
+  If you use this software or specification, please cite it using
+  the metadata from this file.
+type: software
+authors:
+  - family-names: Undheim
+    given-names: Trond Arne
+    orcid: 'https://orcid.org/0000-0001-8454-3915'
+  - family-names: Malik
+    given-names: M. Qaiser
+    affiliation: Answer Labs Inc.
+  - family-names: Hashmi
+    given-names: Nada
+    affiliation: Babson College
+repository-code: 'https://github.com/answerrai/SLPT'
+url: 'https://github.com/answerrai/SLPT'
+abstract: >-
+  An open specification and JSON Schema (Draft 2020-12) for
+  Learning Provenance Records: a portable, machine-checkable
+  record format for learner-AI interaction. SLPT records the
+  provenance of an interaction, not of a learner's knowledge.
+  Schema conformance does not establish measurement validity.
+keywords:
+  - AI literacy
+  - learning provenance
+  - learning analytics
+  - JSON Schema
+  - conformance
+  - open specification
+  - LTI
+license:
+  - Apache-2.0
+  - CC-BY-4.0
+version: 1.2.0
+# date-released is set when the tag is cut; it is not asserted before the release exists.
