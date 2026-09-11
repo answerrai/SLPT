@@ -6,20 +6,23 @@
 
 **Q: Why exactly five dimensions?**
 
-A: The five dimensions were selected from a larger candidate set by applying
-three constraints: each must be observable from interaction logs without
-self-report, each must be non-redundant with the others, and each must
-correlate with documented knowledge-work productivity outcomes. The selection
-rationale is documented in §4.0 of the specification.
+A: The five were selected from a larger candidate set on three criteria: each
+must be observable from interaction logs without self-report, each must be
+non-redundant with the others, and each must be motivated by documented work on
+knowledge-work quality. **No correlation with productivity outcomes has been
+established.** The procedure was internal and reconstructed afterwards; it was
+not a Delphi, consensus or content-validity study, and it is not validation
+evidence. §4.0 and §3 Principle 4 apply: the dimensions are revisable.
 
 **Q: Why are the dimension weights configurable?**
 
-A: Both universities and enterprise partners can configure dimension weights
-to reflect the skills most relevant to their learning objectives. Default
-weights are operated as part of the hosted scoring service and are stable
-across the version — ensuring that credentials issued under the same version
-remain comparable. Weights can only change by major version revision with
-75% Council supermajority per §12.
+A: Institutions can configure dimension weights to reflect their learning
+objectives. **v1.2 defines no normative default weighting**, and each
+configuration carries its own identifier, version and digest so a record names
+the configuration that produced it. **Estimates produced under different
+configurations are not comparable across institutions**, and same-version
+issuance does not make them comparable either — Principle 7 governs, and
+comparability requires linking or equating evidence that does not exist.
 
 **Q: How is this different from xAPI or CLR?**
 
@@ -30,10 +33,13 @@ Provenance Records will export to xAPI and CLR via adapters on the roadmap.
 
 **Q: How is this different from existing AI literacy frameworks?**
 
-A: Every validated AI literacy instrument relies on self-report — asking
-the learner what they know or believe. SLPT measures observable behavior
-in interaction logs. The two are not directly comparable — they answer
-different questions about different evidence.
+A: Validated AI-literacy instruments in the comparison set use either
+self-report scales, for example MAILS and SNAIL, or objective and contrived
+tests, for example AICOS. **AICOS is an objective multiple-choice instrument,
+not a self-report scale.** Within the search frame reported with the
+accompanying SoftwareX article, none derives its score from authentic
+naturalistic interaction traces. SLPT records observable interaction features
+and is **not** a validated instrument; it does not replace one.
 
 ---
 
@@ -41,9 +47,12 @@ different questions about different evidence.
 
 **Q: Why isn't the scorer open source?**
 
-A: The hosted-service model allows scoring logic to improve continuously
-without invalidating previously issued credentials. This is the same pattern
-major model APIs use — stable contract, evolving inference. The specification
+A: Hosting keeps the record contract stable while the implementation changes.
+**Changing the scoring logic is not assumed to preserve the meaning of estimates
+already issued.** Each scoring-model version is a new assessment form:
+comparability across versions requires anchor tasks, linking or equating
+evidence, and subgroup drift analysis (§9.4). Records carry the scoring-model
+version and interaction epoch so that drift is detectable. The specification
 describes the dimensions and their observable signals at the conceptual level
 needed for independent implementation.
 
@@ -64,12 +73,13 @@ reference implementation. Anyone is free to build their own implementation.
 
 **Q: Does this satisfy the EU AI Act?**
 
-A: Article 12 record-keeping is satisfied by the Learning Provenance Record
-structure, fully described in the specification. Article 13 transparency is
-satisfied by the published specification, the documented purpose and
-capabilities of the system, and the OpenAPI contract for the scoring endpoint
-available to institutional partners. The Act does not require disclosure of
-source code for the inference layer of high-risk AI systems.
+A: **No. Schema conformance does not establish legal compliance, and this
+specification does not claim it does.** Where a deployment falls under Annex III
+point 3(b), the LPR provides fields that **may support** provider record-keeping
+under Article 12 and transparency to deployers under Article 13. Whether a given
+deployment satisfies the Act depends on the scoring service, the institutional
+workflow and the applicable legal role, and is a question for the deployer and
+its counsel.
 
 ---
 
@@ -84,20 +94,28 @@ approved external tool via LTI 1.3. Contact **tech@answerr.ai** to begin.
 
 **Q: What LMS platforms does Answerr support?**
 
-A: Canvas, Moodle, Blackboard, and Brightspace via LTI 1.3 with Assignment
-and Grade Services for grade passback.
+A: Canvas, Moodle, Blackboard and Brightspace via LTI 1.3. Assignment and
+Grade Services is an available transport, **but §12.4.5 prohibits automated
+summative gradebook passback of SLPT estimates**, and the reference connector
+rejects passback where use is prohibited or unvalidated. AGS carries
+completion and enrolment data, not dimension estimates.
 
 **Q: How does this work with FERPA?**
 
-A: Query text is SHA-256-hashed — the plaintext of what learners type never
-enters the credential record. Answerr is FERPA compliant. Institutions
-deploying Answerr should sign a data processing agreement with Answer Labs
-Inc. as part of onboarding.
+A: Query text is SHA-256-hashed; the plaintext never enters the record. That
+reduces the learner content retained and **may support** your FERPA
+obligations. **It does not by itself establish FERPA compliance**, which
+depends on your deployment context and how your institution handles education
+records. Compliance status is not asserted by this specification; ask
+tech@answerr.ai for current scoped attestations. Institutions should sign a
+data processing agreement as part of onboarding.
 
 **Q: What compliance certifications does Answerr hold?**
 
-A: Answerr is certified or compliant with FERPA, SOC 2 Type II, GDPR,
-HIPAA, and ISO 27001.
+A: Certification status is a matter for Answer Labs Inc. and is not asserted by
+this specification. Certification and legal compliance are different things, and
+FERPA and HIPAA are statutory regimes rather than certifications a vendor holds.
+Ask tech@answerr.ai for current attestations and their scope.
 
 **Q: Can a student be under 13?**
 
@@ -111,36 +129,45 @@ layer is a platform responsibility governed by §7.1 of the specification.
 
 **Q: What are the two credential tiers?**
 
-A: AIQ™ Learner shows a proficiency band across the five SLPT dimensions —
-from Initializing through to Frontier — and is issued and signed by
-Answer Labs Inc. AIQ Certified shows an exact AIQ credential across all
-five dimensions and is issued and signed by Answer Labs Inc., with the
-option for the institution or employer to add their own co-signature.
+A: `AIQ_LEARNER` and `AIQ_CERTIFIED` are values the `credential_tier` field may
+carry. **A tier is conformant only under rule R5** (§6.4): credentialing use, a
+validation-gated authorization state, and populated validation evidence attached
+to the record. **No completed validation study exists at this release, so no
+record produced under v1.2.0 can conformantly carry a tier.** No proficiency
+band or score interpretation is validated. Tier identifiers issued outside the
+gate are not SLPT-conformant credentials.
 
 **Q: How does an employer verify a credential?**
 
-A: Credential verification is available via the AIQ API, accessible to
-institutional partners on request. Contact **tech@answerr.ai** to discuss
-verification integration.
+A: **Employment, hiring and selection use is not authorized** (§11), and the
+prohibition is recorded in every record. Cross-institutional comparison is also
+a non-permitted use, because weighting configurations differ by institution.
+Verification tooling exists for institutional partners, but it establishes the
+provenance of a record, not the meaning of an estimate.
 
-**Q: Do credentials expire?**
+**Q: Do estimates expire?**
 
-A: Validity windows are configurable by universities and enterprise partners
-to reflect their own assessment policies. Contact **tech@answerr.ai** to
-discuss configuration options during onboarding.
+A: Estimate windows are configurable. **This is a data-recency setting, not a
+statement that an estimate was valid within the window and ceases to be
+afterwards** — no interpretation of an estimate is validated at this release,
+so there is no validity to expire. Windows also do not make estimates
+comparable across scoring-model versions; see §9.4.
 
 **Q: Can a credential be revoked?**
 
-A: Yes. Institutional co-signatures can be withdrawn if the institution
-determines that learning events did not occur within their governed
-environment, per §10.2 of the specification.
+A: Institutional co-signatures can be withdrawn if the institution determines
+that events did not occur within its governed environment; see §10. Separately,
+**where a learner's dispute is upheld, §12.4.4 and schema rule R6 require the
+record itself to be marked corrected or invalidated** — a reassessment is not a
+correction.
 
-**Q: What if a learner's AI capability improves over time?**
+**Q: What if a learner's behaviour changes over time?**
 
-A: AIQ credentials reflect current behavior within the configured validity
-window. A learner who consistently challenges AI output and verifies across
-models will see their Judgment Quality improve over time. The credential
-is designed to be a live reflection of capability, not a static snapshot.
+A: Recorded features reflect behaviour within the configured window, and
+Adaptability is defined across episodes rather than within one. **The record
+does not track capability**: no interpretation of an estimate as capability is
+validated, and change in an estimate across scoring-model versions may reflect
+scorer drift rather than the learner (§9.4).
 
 ---
 
@@ -150,14 +177,15 @@ is designed to be a live reflection of capability, not a static snapshot.
 
 A: The SLPT Governance Council. Initial composition is convened by Answer
 Labs Inc. Target composition over 24 months includes universities, enterprise
-employers, independent researchers, representatives from SLPT-compliant
-platforms, and a learner advocate. See §12 of the specification.
+employers, independent researchers, representatives from platforms
+implementing SLPT, and a learner advocate. See §12 of the specification.
 
-**Q: When will v1.1 be released?**
+**Q: What comes after v1.2?**
 
-A: When the Council convenes and ratifies the v1.1 changes. Current candidate
-additions include xAPI and CLR adapters, CTDL, European Learning Model
-portability, and EU AI Act Article 12 audit-trail export. Targeting June 2026.
+A: The interoperability adapters — xAPI, CLR / Open Badges, Common Cartridge,
+CTDL, European Learning Model — remain roadmap, together with multi-implementation
+exchange testing, which is what an interoperability claim would require. Timing
+follows Council ratification under §12.2; no date is committed.
 
 **Q: How do I propose a change?**
 

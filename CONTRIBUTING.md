@@ -14,19 +14,25 @@ by Answer Labs Inc. This document explains how to contribute.
 - **Documentation improvements.** Typos, broken links, unclear wording,
   or missing information in the implementer guide or FAQ.
 
-- **Independent scorer implementations.** If you build your own scorer
-  against the five SLPT dimensions using the published specification,
-  file an issue tagged `independent-implementation` and we will link
-  to it from the README.
+- **Independent scorer implementations.** If you build your own scorer against
+  the four first-order dimensions and the candidate Judgment Quality composite,
+  using the published specification and schema, file an issue tagged
+  `independent-implementation` and we will link to it from the README.
+
+- **Conformance fixtures.** Cases the 71-fixture corpus does not cover,
+  especially omitted-property cases for the cross-field rules. R3 shipped
+  unenforced for an omitted `task_frame` because its only negative fixture set
+  the value to null; `rule_probe.py` now checks for that class.
 
 ---
 
 ## What is coming
 
-As the schema, adapters, and API are published in subsequent releases,
-contributions will expand to include adapter implementations, language
-ports, conformance tests, and tooling improvements. This document will
-be updated at each release.
+The schema, conformance harness and OpenAPI contract are published in this
+release. The interoperability adapters — xAPI, CLR / Open Badges, Common
+Cartridge, CTDL, European Learning Model — remain roadmap. Contributions are
+welcome on adapter implementations, language ports, conformance fixtures and
+tooling. This document is updated at each release.
 
 ---
 
@@ -67,9 +73,5 @@ assume good faith.
 
 ## Questions
 
-Contact **tech@answerr.ai** for any questions about SLPT or this repository.
-
-## Questions
-
-For specification questions, institutional partnerships, API access,
-or general enquiries, contact **tech@answerr.ai**
+For specification questions, institutional partnerships, API access, or general
+enquiries, contact **tech@answerr.ai**

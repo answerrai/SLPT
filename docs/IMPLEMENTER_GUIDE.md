@@ -8,8 +8,14 @@ Standard Learning Provenance Taxonomy through Answerr.
 ## Who this guide is for
 
 This guide is for university administrators, IT teams, and enterprise
-learning and development leads who are evaluating or deploying Answerr
-as their SLPT-compliant AI learning platform.
+learning and development leads who are evaluating or deploying Answerr as an
+SLPT-integrated AI learning platform.
+
+**A note on the word compliant.** Record conformance is determined by validating
+a record against `schema/lpr_v1.2.0.json`. Deployment conformance is determined
+by §12.4 of the specification, and **§12.4 was added prospectively at v1.2.0;
+operator and institutional confirmation is outstanding.** Neither is established
+by using this platform.
 
 ---
 
@@ -31,8 +37,9 @@ through the full onboarding process.
 
 A fully hosted AI learning environment that your learners access directly.
 The platform includes AI Tutors, AI Assistants, Quizzes, Grading, and
-Analytics — all instrumented to produce SLPT-compliant Learning Provenance
-Records automatically.
+Analytics — instrumented to serialize candidate Learning Provenance Records.
+**Whether a given record conforms is determined by validating it against the
+schema**, not by the platform that produced it.
 
 ### LTI 1.3 integration
 
@@ -42,27 +49,37 @@ This means:
 
 - Learners access Answerr directly from within your LMS
 - Single sign-on using your institution's existing identity provider
-- Grades and completion data pass back automatically into your gradebook
+- Completion and enrolment data pass back into your gradebook
+- **No automated summative passback of SLPT dimension estimates.** §12.4.5
+  prohibits it, and the reference connector rejects passback where use is
+  prohibited or unvalidated. Estimates return to an institutional dashboard
+  post hoc, not to a gradebook view
 - No separate login or platform switching required for learners
 
 ### AIQ™ credentials
 
-Every learner on the Answerr platform generates an AIQ™ credential
-automatically as they interact with AI. Two tiers are available:
+`AIQ_LEARNER` and `AIQ_CERTIFIED` are values the `credential_tier` field may
+carry. **They are gated, not awarded.** Rule R5 in §6.4 of the specification
+makes a non-null tier conformant only where the record declares credentialing
+use, carries a validation-gated authorization state, and attaches populated
+validation evidence.
 
-- **AIQ Learner** — issued and co-signed by Answer Labs Inc. Shows a
-  proficiency band across the five SLPT dimensions — from Initializing
-  through to Frontier. Available to all learners meeting the minimum
-  activity threshold.
+**No completed validation study is reported by the authors at this release, so the
+authors claim no current tier as validated**, and no proficiency band or score
+interpretation is validated by this specification. Schema validation checks the
+consistency of the declaration a record makes; **it does not establish evidential
+adequacy**, which is a governance determination. Where the hosted product emits tier
+identifiers outside the gate, those outputs are not SLPT-conformant credentials.
 
-- **AIQ Certified** — issued and co-signed by Answer Labs Inc. Shows
-  an exact AIQ credential across all five SLPT dimensions. Institutions
-  and enterprises who are active Answerr partners may also add their
-  own co-signature, carrying their authority alongside the Answer Labs
-  Inc. signature.
+Institutions and enterprises who are active Answerr partners may also add their
+own co-signature. **A co-signature attests that events occurred within a governed
+institutional environment. It does not validate the meaning of any estimate**, and
+lifts no prohibition in §10 or §11.
 
-Both credentials can be generated directly through the Answerr platform
-or programmatically via the AIQ API, available to partners on request.
+The Answerr platform and the AIQ API can emit proprietary AIQ product outputs.
+**Those are product outputs, not SLPT-conformant credential tiers**, and the
+AIQResponse object returned by the API is not a Learning Provenance Record — see
+the boundary statement in `api/openapi.json`.
 
 ### Configurable dimension weights
 
@@ -76,9 +93,12 @@ weights are operated as part of the hosted scoring service.
 
 ### Privacy and compliance
 
-Answerr is FERPA compliant and certified or compliant with SOC 2
-Type II, GDPR, HIPAA, and ISO 27001. Query text is SHA-256-hashed — the plaintext
-of what your learners type never enters the credential record.
+Query text is SHA-256-hashed: the plaintext of what your learners type never
+enters the record. That reduces the learner content retained and **may support**
+your institutional privacy obligations; it does not by itself establish FERPA,
+GDPR or any other compliance, which depends on your workflow and legal role.
+For current certifications and their scope, ask tech@answerr.ai. Certification
+and legal compliance are different things.
 
 Answerr also provides PII detection and redaction capabilities for uploaded
 documents:
@@ -123,8 +143,9 @@ Once your partnership is confirmed:
 
 - Answerr provides an analytics dashboard for instructors and
   administrators
-- AIQ credentials are generated automatically — no manual intervention
-  required
+- Proprietary AIQ product outputs are generated automatically. **They are not
+  SLPT-conformant credential tiers**, and no record produced under v1.2.0 carries
+  a tier the authors claim as validated
 - The Answerr team remains available for ongoing support via
   **tech@answerr.ai**
 
@@ -141,9 +162,14 @@ industry context.
 
 ## API access
 
-For partners who want to integrate AIQ credentials programmatically into
-their own systems — HR platforms, talent management tools, internal
-dashboards, or LMS platforms — API access is available on request.
+API access is available on request for integration into learning-administration
+systems: institutional dashboards, LMS platforms and reporting tools.
+
+**Employment, hiring and selection use is not authorized** (§11 of the
+specification). That prohibition is recorded in every record through
+`intended_use` and `use_authorization_status`, is carried into customer
+agreements, and is not lifted by institutional co-signature. Integration into HR
+or talent-management systems is outside permitted use.
 
 Contact **tech@answerr.ai** to discuss integration options.
 

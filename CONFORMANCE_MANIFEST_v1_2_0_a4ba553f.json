@@ -1,0 +1,720 @@
+{
+  "summary": {
+    "total": 71,
+    "positive": 17,
+    "negative": 54,
+    "outcomes_reproduced": 71,
+    "outcomes_not_reproduced": 0
+  },
+  "environment": {
+    "build_id": "a4ba553f",
+    "build_id_covers": "21 content files, see RELEASE_FILES.sha256",
+    "generated_utc": "2026-08-31T20:17:30+00:00",
+    "python": "3.12.3",
+    "jsonschema": "4.26.0",
+    "schema_file": "schema/lpr_v1.2.0.json",
+    "schema_sha256": "82834d14ce6580d1d2d6640fe9309a1f4a87d24cfc0909bb992cbb5248a9137e",
+    "validator_file": "conformance/slpt_validate.py",
+    "validator_sha256": "e43ff78428adc44374b04b2d48ad5fc85b2a9ae80a3b0e376b778085c6fc4b0f",
+    "spec_file": "spec/SLPT-AIQ-v1.2.md",
+    "spec_sha256": "fe7977c507f27f42cfd930f2d61dcab9b40a576dce8c4421bc4f90709c0056a8",
+    "release_tag": "v1.2.0",
+    "release_doi": "PENDING \u2014 minted on deposit",
+    "exit_code": 0
+  },
+  "class_totals": {
+    "Conformant fixtures: base record, optional fields, boundary values, enum members, nullable fields, and the R1/R5/R6 satisfied paths": {
+      "cases": 17,
+      "outcomes_reproduced": 17
+    },
+    "Required fields, root and nested objects": {
+      "cases": 22,
+      "outcomes_reproduced": 22
+    },
+    "Enumerations": {
+      "cases": 6,
+      "outcomes_reproduced": 6
+    },
+    "Semantic-version, hash and digest patterns": {
+      "cases": 5,
+      "outcomes_reproduced": 5
+    },
+    "Value range and type": {
+      "cases": 5,
+      "outcomes_reproduced": 5
+    },
+    "additionalProperties, both levels": {
+      "cases": 2,
+      "outcomes_reproduced": 2
+    },
+    "Privacy: plaintext leakage": {
+      "cases": 1,
+      "outcomes_reproduced": 1
+    },
+    "R1 cross-field: authorization requires populated evidence": {
+      "cases": 3,
+      "outcomes_reproduced": 3
+    },
+    "R2 cross-field: authorization requires validation_status": {
+      "cases": 1,
+      "outcomes_reproduced": 1
+    },
+    "R3 cross-field: delegation state requires a task frame": {
+      "cases": 2,
+      "outcomes_reproduced": 2
+    },
+    "R4 cross-field: dispute requires learner access": {
+      "cases": 1,
+      "outcomes_reproduced": 1
+    },
+    "R5 cross-field: the credential gate": {
+      "cases": 5,
+      "outcomes_reproduced": 5
+    },
+    "R6 cross-field: dispute upheld requires action on the record": {
+      "cases": 1,
+      "outcomes_reproduced": 1
+    }
+  },
+  "cases": [
+    {
+      "id": "P01",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "minimal conformant record with all required fields",
+      "fixture_sha256": "debec2df5c3ccaed242d9722b6ea98ae1160b98dd675109fa4c9d307ba9a657d",
+      "first_error": ""
+    },
+    {
+      "id": "P02",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "optional institution_id omitted",
+      "fixture_sha256": "b579225ff9efeb330566e6249ff567f2fa34676fc28805a855d74cf5108419c3",
+      "first_error": ""
+    },
+    {
+      "id": "P03",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "boundary scores at 0.0 and 1.0 accepted",
+      "fixture_sha256": "57ae92e2dcd4434f5d80d2dd52180f299f12a374c8476a03f94232d2916892e9",
+      "first_error": ""
+    },
+    {
+      "id": "P04",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "R5 future path: tier + credentialing + conditionally_authorized + populated evidence",
+      "fixture_sha256": "24cbbd5efcacb4468ea371be52e6a9edc9540e9a0b412a7d27cfae7295d5ea16",
+      "first_error": ""
+    },
+    {
+      "id": "P05",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "null credential_tier accepted (v1.1)",
+      "fixture_sha256": "debec2df5c3ccaed242d9722b6ea98ae1160b98dd675109fa4c9d307ba9a657d",
+      "first_error": ""
+    },
+    {
+      "id": "P06",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "null dimension_estimates accepted (v1.1)",
+      "fixture_sha256": "07bcb6bf2987b387d129f96a0a93814d55221db48ed56cec105edda91adad405",
+      "first_error": ""
+    },
+    {
+      "id": "P07",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "context_type TUTOR accepted",
+      "fixture_sha256": "f16d4ae5a6169be7e40ab29574ed49da81917ee6d1669c0ca734df0f903ff88f",
+      "first_error": ""
+    },
+    {
+      "id": "P08",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "context_type ASSISTANT accepted",
+      "fixture_sha256": "8ba6544f9ae833dac6075fcd99a845f6f963d93f1640fd70d5d19b972c12108d",
+      "first_error": ""
+    },
+    {
+      "id": "P09",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "context_type QUIZ accepted",
+      "fixture_sha256": "37ad5c1d82fefc958c4837221253fdefbcf0c1af7df67c5b8dba74c0afc7bd6c",
+      "first_error": ""
+    },
+    {
+      "id": "P10",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "context_type ASSIGNMENT accepted",
+      "fixture_sha256": "e1b088b72190be309764063d12331f37ea7655a0d629f65b427d6d1cb43badf0",
+      "first_error": ""
+    },
+    {
+      "id": "P11",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "context_type REFLECTION accepted",
+      "fixture_sha256": "263d94b6b0db9b56f89a2eea1bb3d0f49b664e1293f5e42773d9edb2262c9fad",
+      "first_error": ""
+    },
+    {
+      "id": "P12",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "uppercase hex hash accepted",
+      "fixture_sha256": "a92caedf6346ac9104c3a15abfbf0c123814db1c1f0930f1d46ca5ecb2892f71",
+      "first_error": ""
+    },
+    {
+      "id": "P13",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "credentialing use with unvalidated status and null tier permitted",
+      "fixture_sha256": "a25dcb52c38191b44572e86c800f813d40e2f24d15c017573555d026bff87765",
+      "first_error": ""
+    },
+    {
+      "id": "P14",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "dispute upheld for the learner with the record invalidated",
+      "fixture_sha256": "fa47610900da1595325ec4adbb5e044a9d0e3912dbe53d1353e7943e61c7bdd8",
+      "first_error": ""
+    },
+    {
+      "id": "P15",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "adjudicated dispute with trace unavailable",
+      "fixture_sha256": "689965272104b24d7914e323af5063d8837d495876dc563ccc312cdc18745a1e",
+      "first_error": ""
+    },
+    {
+      "id": "P16",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "audit bundle fully populated",
+      "fixture_sha256": "a099e3ca66f9a1041e7ff86952d72a9ed95653d50203cb30be58a7153b3c4a27",
+      "first_error": ""
+    },
+    {
+      "id": "P17",
+      "expected_valid": true,
+      "observed_valid": true,
+      "outcome_reproduced": true,
+      "constraint": "delegation state relative to a declared task frame",
+      "fixture_sha256": "78d784daf4b1e21d420f742b7a48d84086af49374c332bfbf02c0de4f093e0fc",
+      "first_error": ""
+    },
+    {
+      "id": "N01",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "required: record_id",
+      "fixture_sha256": "1c865fb06eabd65c67368c60b69cb99f588de3277ae45add19eb739b3ce513aa",
+      "first_error": "at <root>: 'record_id' is a required property"
+    },
+    {
+      "id": "N02",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "required: record_version",
+      "fixture_sha256": "db26ca56dbaa5e640eee4e972243821c608b3c119421985f75e92a3fc114469c",
+      "first_error": "at <root>: 'record_version' is a required property"
+    },
+    {
+      "id": "N03",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "required: platform_id",
+      "fixture_sha256": "0104d2cd165a398e7b45488e6f3cfcf4d33d7f3717717cca610a3e2d1b22aa67",
+      "first_error": "at <root>: 'platform_id' is a required property"
+    },
+    {
+      "id": "N04",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "required: session_id",
+      "fixture_sha256": "521530d3f4bad3265d02d0edc6512d74f9fd455b6f92fb6c477a9e4ec42c6288",
+      "first_error": "at <root>: 'session_id' is a required property"
+    },
+    {
+      "id": "N05",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "required: timestamp_utc",
+      "fixture_sha256": "72cc1ad0efb4f9a824aed659ce3e60ffd9f877c5d6250efc6a7bc4945b14757a",
+      "first_error": "at <root>: 'timestamp_utc' is a required property"
+    },
+    {
+      "id": "N06",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "required: context_type",
+      "fixture_sha256": "e82e6eb99d02a15da95bee5d1082d1e542391ea10873c2d3b66f042cf773e63c",
+      "first_error": "at <root>: 'context_type' is a required property"
+    },
+    {
+      "id": "N07",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "required: context_id",
+      "fixture_sha256": "4f3cd20268c9ef614b168e8f5160020bad2f4591c55070d286104b759cd77ae2",
+      "first_error": "at <root>: 'context_id' is a required property"
+    },
+    {
+      "id": "N08",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "required: verified_context",
+      "fixture_sha256": "4136c1302c8fb51e059ccd445520526b85e07cc1ce90d9681239e8d0a3f852c1",
+      "first_error": "at <root>: 'verified_context' is a required property"
+    },
+    {
+      "id": "N09",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "required: query_text_hash",
+      "fixture_sha256": "849cb81112eaf3945aedeed2519d015cec5d8f2ea4bebc2ddde7dafd86045362",
+      "first_error": "at <root>: 'query_text_hash' is a required property"
+    },
+    {
+      "id": "N10",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "required: dimension_estimates",
+      "fixture_sha256": "f2bd1afd90bcbebdefb273f527ef24f7e45ac32df44756d944d5f3f3acb49c14",
+      "first_error": "at <root>: 'dimension_estimates' is a required property"
+    },
+    {
+      "id": "N11",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "required: credential_tier key present",
+      "fixture_sha256": "3b73db2e8dc3d3fe2f92fd2520f9d8e2694d8bd4dd6f04a02b6733ca893bba1e",
+      "first_error": "at <root>: 'credential_tier' is a required property"
+    },
+    {
+      "id": "N12",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "required: intended_use",
+      "fixture_sha256": "2c1ffd442ab0d0eb175bcef60db0bedfe15e98676a75d68a40d4ae39f4c02a09",
+      "first_error": "at <root>: 'intended_use' is a required property"
+    },
+    {
+      "id": "N13",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "required: use_authorization_status",
+      "fixture_sha256": "73ada962d7edefe00d3f78b842f7dd6ee903f70ff78add08baf84a1f16ee0ded",
+      "first_error": "at <root>: 'use_authorization_status' is a required property"
+    },
+    {
+      "id": "N14",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "required: scoring_model",
+      "fixture_sha256": "86f881699d5f911923f6776a4ebfbf1226920145c821a09a7e14017b4b069106",
+      "first_error": "at <root>: 'scoring_model' is a required property"
+    },
+    {
+      "id": "N15",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "required: delegation_annotation",
+      "fixture_sha256": "a83defcff406bfc953a7b34834d563ff8fa3ee7fde4604da3b0c4ab7837885a0",
+      "first_error": "at <root>: 'delegation_annotation' is a required property"
+    },
+    {
+      "id": "N16",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "scoring_model.required: weight_config_id",
+      "fixture_sha256": "1f7a4a553536806bdf15aa24a11a4d661b5b16fb015dbbc250e7b5538a42deba",
+      "first_error": "at scoring_model: 'weight_config_id' is a required property"
+    },
+    {
+      "id": "N17",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "scoring_model.required: weight_config_digest",
+      "fixture_sha256": "f22578560a3f0564041d55bd3bd3ab7dc69699546dc1e8700a2d7d3418029e6e",
+      "first_error": "at scoring_model: 'weight_config_digest' is a required property"
+    },
+    {
+      "id": "N18",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "scoring_model.required: calibration_epoch",
+      "fixture_sha256": "62cedc62f2a13c4a3a3da8298e21e7e053f76b7f71a213a1a0952b9f96944312",
+      "first_error": "at scoring_model: 'calibration_epoch' is a required property"
+    },
+    {
+      "id": "N19",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "use_authorization_status not in enum",
+      "fixture_sha256": "b38e622d7e0d9e562f68ea8fd54595e1d1309bbce4ceccf1f30d805774e014b1",
+      "first_error": "at use_authorization_status: 'fine' is not one of ['prohibited', 'unvalidated', 'conditionally_authorized', 'authorized']"
+    },
+    {
+      "id": "N20",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "delegation state not in enum",
+      "fixture_sha256": "984be46e0c101b453d677f218cf1692407c075091cf26c42417c4eee481c7d5e",
+      "first_error": "at delegation_annotation/state: 'definitely_delegated' is not one of ['consistent_with_task_frame', 'inconsistent_with_task_frame', 'not_assessable']"
+    },
+    {
+      "id": "N21",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "weight_config_digest fails sha256 pattern",
+      "fixture_sha256": "4651dd5bc313c0db8c8d735978275bfafa268b9039e367823ce47c031dfaf5e8",
+      "first_error": "at scoring_model/weight_config_digest: 'abc' does not match '^sha256:[a-fA-F0-9]{64}$'"
+    },
+    {
+      "id": "N22",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "required: context_filter_passed",
+      "fixture_sha256": "90706a4954ca4341896813b889258d97a06abff8cdaa12936ed59db22530084c",
+      "first_error": "at <root>: 'context_filter_passed' is a required property"
+    },
+    {
+      "id": "N23",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "dimension_estimates.required: jq",
+      "fixture_sha256": "6bb4338033733f12db908982bdeda258ff21c0f47d14c7b830e805b1e50f9aa7",
+      "first_error": "at dimension_estimates: {'qo': None, 'sod': None, 'sa': None, 'ad': None, 'signal_confidence': None, 'computation_method': 'answerlabs_scorer_v1.1.0'} is not valid under any of the given schemas"
+    },
+    {
+      "id": "N24",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "dimension_estimates.required: signal_confidence",
+      "fixture_sha256": "dad0fc13e5b2c0d56aef588aeacdf5614ae02c3e746ee85c952ea978917f08e3",
+      "first_error": "at dimension_estimates: {'jq': None, 'qo': None, 'sod': None, 'sa': None, 'ad': None, 'computation_method': 'answerlabs_scorer_v1.1.0'} is not valid under any of the given schemas"
+    },
+    {
+      "id": "N25",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "dimension_estimates.required: computation_method",
+      "fixture_sha256": "5eb9b55c49e04c61bedbf1620a602864d31079ac836f2c5c26e638484664bbbc",
+      "first_error": "at dimension_estimates: {'jq': None, 'qo': None, 'sod': None, 'sa': None, 'ad': None, 'signal_confidence': None} is not valid under any of the given schemas"
+    },
+    {
+      "id": "N26",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "score above maximum 1.0",
+      "fixture_sha256": "919a11a1d3f78c1983188c27692001c8bdbebc33e77b04dca2392b7025baa9d2",
+      "first_error": "at dimension_estimates: {'jq': 1.4, 'qo': None, 'sod': None, 'sa': None, 'ad': None, 'signal_confidence': None, 'computation_method': 'answerlabs_scorer_v1.1.0'} is not valid under any of the given schemas"
+    },
+    {
+      "id": "N27",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "score below minimum 0.0",
+      "fixture_sha256": "7f0b1d9ef3b2126c40659592d375878716b4649d4d76db66367227abff580906",
+      "first_error": "at dimension_estimates: {'jq': None, 'qo': -0.1, 'sod': None, 'sa': None, 'ad': None, 'signal_confidence': None, 'computation_method': 'answerlabs_scorer_v1.1.0'} is not valid under any of the given schemas"
+    },
+    {
+      "id": "N28",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "score wrong type (string)",
+      "fixture_sha256": "89b76cc9ebb2848659c0558626cf5fe1c123af6b60b144580064bd3abe969e9b",
+      "first_error": "at dimension_estimates: {'jq': '0.78', 'qo': None, 'sod': None, 'sa': None, 'ad': None, 'signal_confidence': None, 'computation_method': 'answerlabs_scorer_v1.1.0'} is not valid under any of the given schemas"
+    },
+    {
+      "id": "N29",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "credential_tier not in enum",
+      "fixture_sha256": "dcecc873ced7458b231813f7769c3641dfeeda7f5c44dedf2ca57f43a97a3f54",
+      "first_error": "at credential_tier: 'AIQ_PLATINUM' is not one of ['AIQ_LEARNER', 'AIQ_CERTIFIED', None]"
+    },
+    {
+      "id": "N30",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "context_type not in enum",
+      "fixture_sha256": "bc6bed2da3c6ea2e67c20d18744260629d47d3098378a27ae03defa412ce830a",
+      "first_error": "at context_type: 'SOCIAL' is not one of ['TUTOR', 'ASSISTANT', 'QUIZ', 'RESEARCH', 'ASSIGNMENT', 'REFLECTION']"
+    },
+    {
+      "id": "N31",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "record_version fails semver pattern",
+      "fixture_sha256": "991b9d7f3117412dd2ef1d5348fa6b18072e93ad363d96afb9e4ac2938495932",
+      "first_error": "at record_version: 'v1.0' does not match '^\\\\d+\\\\.\\\\d+\\\\.\\\\d+$'"
+    },
+    {
+      "id": "N32",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "query_text_hash wrong length",
+      "fixture_sha256": "8d34cefbf6d921deedd75c640c62df179ca87e040780dedf421fdaa34e902380",
+      "first_error": "at query_text_hash: 'abc123' does not match '^[a-fA-F0-9]{64}$'"
+    },
+    {
+      "id": "N33",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "query_text_hash non-hex characters",
+      "fixture_sha256": "d9d09f6e511b6b50d80c802d551b686a0f82e834262311b9d2df1a88d9fe0273",
+      "first_error": "at query_text_hash: 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz' does not match '^[a-fA-F0-9]{64}$'"
+    },
+    {
+      "id": "N34",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "verified_context wrong type",
+      "fixture_sha256": "7b60822023a81b6348668323e30bc8421364c808ad657ca4bcec57ff96ec71f2",
+      "first_error": "at verified_context: 'true' is not of type 'boolean'"
+    },
+    {
+      "id": "N35",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "additionalProperties false at root",
+      "fixture_sha256": "136d10a09e8c6a7b0cc2cce6e9856baa63caa45e5b3642ebbb9143b5dc5b70c6",
+      "first_error": "at <root>: Additional properties are not allowed ('unexpected_field' was unexpected)"
+    },
+    {
+      "id": "N36",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "additionalProperties false in dimension_estimates",
+      "fixture_sha256": "a8c7bd4486da9c0c414b0fcd660152db650d0e9b7bc53ca453e2413fcc62388f",
+      "first_error": "at dimension_estimates: {'jq': None, 'qo': None, 'sod': None, 'sa': None, 'ad': None, 'signal_confidence': None, 'computation_method': 'answerlabs_scorer_v1.1.0', 'xx': 0.5} is not valid under any of the given schemas"
+    },
+    {
+      "id": "N37",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "plaintext query leaked into record",
+      "fixture_sha256": "2ff285843683b94540835a1f212a50cad3daae1af691d043d9f608899743fac2",
+      "first_error": "at <root>: Additional properties are not allowed ('query_text' was unexpected)"
+    },
+    {
+      "id": "N38",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "R1: credentialing use asserted as authorized without validation evidence",
+      "fixture_sha256": "035c7eda0c98063235c622931d506f853ac62e3d6b6fcbac71adf3315e9a286c",
+      "first_error": "at validation_status: None is not of type 'object'"
+    },
+    {
+      "id": "N39",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "R1: summative assessment asserted as authorized without validation evidence",
+      "fixture_sha256": "ebd359bd2a2a6c484c03026c0a52fe7b102493ea4f483468cbfd085a8fafcc0c",
+      "first_error": "at validation_status: None is not of type 'object'"
+    },
+    {
+      "id": "N40",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "R2: authorized status without validation_status evidence",
+      "fixture_sha256": "59bbbee8a8fdbc7fd4b81ba326e214068dac4632cf9a66d4c970687d10da76ec",
+      "first_error": "at validation_status: None is not of type 'object'"
+    },
+    {
+      "id": "N41",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "R3: delegation state relative to an OMITTED task_frame",
+      "fixture_sha256": "c5def09a0dfd51fd7d438b30820013152cc61fb1c35591f16774e5d868f32971",
+      "first_error": "at <root>: 'task_frame' is a required property"
+    },
+    {
+      "id": "N42",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "R3: delegation state relative to a null task_frame",
+      "fixture_sha256": "7e68bd4605bbb30405a15f26df2a06796b980acbdc52d3d5ddc3526d49568692",
+      "first_error": "at task_frame: None is not of type 'object'"
+    },
+    {
+      "id": "N43",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "R4: open dispute on a record the learner cannot read",
+      "fixture_sha256": "1852816870618147d9e915e18c5a9a3114aacda64eb0cde0d9e7ac3f396ec443",
+      "first_error": "at learner_access: True was expected"
+    },
+    {
+      "id": "N44",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "dispute_status.adjudicator not in enum",
+      "fixture_sha256": "1a08a52cb231fa5b988b8c783151205aef7b7e502db38863c7ec2104e8430990",
+      "first_error": "at dispute_status/adjudicator: 'registrar' is not one of ['answer_labs', 'institution', None]"
+    },
+    {
+      "id": "N45",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "dispute_status wrong type (v1.0 string form)",
+      "fixture_sha256": "4bd24ba192c02f7ae9cd6894d9cbaca0055ee35a6c470c9149ed868ec9d951fc",
+      "first_error": "at dispute_status: 'none' is not of type 'object'"
+    },
+    {
+      "id": "N46",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "conformance_suite_version fails semver pattern",
+      "fixture_sha256": "fe35ca7fdcc01fd23c946920a67c615340bab6baacfaf4b7effaaa44164ea6ef",
+      "first_error": "at scoring_model/conformance_suite_version: 'v1' does not match '^\\\\d+\\\\.\\\\d+\\\\.\\\\d+$'"
+    },
+    {
+      "id": "N47",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "R5: tier asserted with formative use",
+      "fixture_sha256": "21a814b9d3c188e9da10d8e0b866e0a267682627321fbefdbafc5452ab6f8420",
+      "first_error": "at intended_use: 'credentialing' was expected"
+    },
+    {
+      "id": "N48",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "R5: tier asserted with credentialing use left unvalidated",
+      "fixture_sha256": "a34d5cce28213718df28731cfc2fa4587a81bf6e50bd4d35f6b75b119bb279f8",
+      "first_error": "at use_authorization_status: 'unvalidated' is not one of ['conditionally_authorized', 'authorized']"
+    },
+    {
+      "id": "N49",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "R5: tier asserted with credentialing use prohibited",
+      "fixture_sha256": "b756d082f1c4c9150e5ff706bee843d0353fe03e9dff00f0dcfc2a0a12676e28",
+      "first_error": "at use_authorization_status: 'prohibited' is not one of ['conditionally_authorized', 'authorized']"
+    },
+    {
+      "id": "N50",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "R5: tier authorized but no validation evidence attached",
+      "fixture_sha256": "343bd9c5a16930bd773439d498e9dbb7913eb7199e9fcbbde1378461415d5c3a",
+      "first_error": "at validation_status: None is not of type 'object'"
+    },
+    {
+      "id": "N51",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "R5: tier authorized with an empty validation_status object",
+      "fixture_sha256": "8695183cfd38fde4bb01bd4e854a270ded2718c4ce9e1b1efdc36ffe00069c1f",
+      "first_error": "at validation_status: 'validation_evidence_uri' is a required property"
+    },
+    {
+      "id": "N52",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "R1: summative use asserted as authorized with an empty validation_status object",
+      "fixture_sha256": "224876543500c5c06f338536266da1cf34c1e8c59d9d2ebd0add3d460ce97f5d",
+      "first_error": "at validation_status: 'validation_evidence_uri' is a required property"
+    },
+    {
+      "id": "N53",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "R6: dispute upheld for the learner with no action on the record",
+      "fixture_sha256": "26dda207e871d2cc3da5b4747f9824345eb9863b3ce43470a5bae91f97b54897",
+      "first_error": "at dispute_status/record_action: 'none' is not one of ['corrected', 'invalidated']"
+    },
+    {
+      "id": "N54",
+      "expected_valid": false,
+      "observed_valid": false,
+      "outcome_reproduced": true,
+      "constraint": "dispute_status.record_action not in enum",
+      "fixture_sha256": "d178ff42a9d9f4da1f148413cfeaaea38cb88f2b082849016da1f3fa02804f9d",
+      "first_error": "at dispute_status/record_action: 'rescored' is not one of ['none', 'corrected', 'invalidated', 'reassessment_required', None]"
+    }
+  ]
+}

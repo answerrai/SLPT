@@ -1,259 +1,283 @@
 # SLPT — Standard Learning Provenance Taxonomy
 
-**An open specification for documenting human judgment in AI-mediated learning.**
+**An open specification and JSON Schema for recording learner–AI interaction.**
 
 [![License](https://img.shields.io/badge/license-Apache_2.0-blue.svg)](LICENSE)
-[![Spec Version](https://img.shields.io/badge/spec-v1.0-green.svg)](spec/SLPT-AIQ-v1.0.md)
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20297510-blue.svg)](https://doi.org/10.5281/zenodo.20297510)
+[![Spec Version](https://img.shields.io/badge/spec-v1.2-green.svg)](spec/SLPT-AIQ-v1.2.md)
 
 ---
 
 ## What this is
 
-SLPT is an open specification for capturing how individuals learn and demonstrate judgment in AI-mediated environments. It defines five permanent dimensions of human capability that become more — not less — valuable as AI capability advances: judgment quality, question originality, discernment and taste, synthesis under ambiguity, and learning velocity. It specifies a machine-readable data contract — the Learning Provenance Record (LPR) — that platforms can use to document AI-mediated learning events in a way that is portable, privacy-preserving, and verifiable.
+SLPT is an open specification for recording how individuals interact with generative AI
+during learning. It defines five proposed dimensions — four first-order and one candidate
+composite: judgment quality, question originality, source and output discernment,
+synthesis under ambiguity, and adaptability. It specifies a machine-readable data
+contract, the Learning Provenance Record (LPR), that platforms can use to document
+AI-mediated learning events in a portable, privacy-preserving form.
 
-This repository contains:
+**SLPT records the provenance of an interaction, not the provenance of a learner's
+knowledge.** Conformance to the schema establishes that a record satisfies published
+structural rules. It does not establish measurement validity, interoperability between
+independent implementations, or legal compliance. Those four claims are separated in §1.5
+of the specification, and the boundary between them is enforced by the cross-field rules
+in §6.4.
 
-- The **SLPT-AIQ-v1.0 specification document** (`spec/`)
-- **LTI 1.3 integration** for single sign-on and grade passback into Canvas, 
-  Moodle, Blackboard, and Brightspace
-- Implementer documentation and FAQ (`docs/`)
+### What is in this release
 
-What this repository does **not** contain: scoring logic, dimension formulas, signal weights, tier thresholds, classifier code, or prompt templates used to evaluate interactions. Those are operated as a hosted service by Answer Labs Inc. 
+| Component | Path |
+|---|---|
+| Specification document, SLPT-AIQ v1.2 | `spec/SLPT-AIQ-v1.2.md` |
+| Learning Provenance Record JSON Schema, Draft 2020-12 | `schema/lpr_v1.2.0.json` |
+| Conformance validator and 70-fixture corpus | `conformance/` |
+| OpenAPI contract for the hosted scoring endpoint | `api/openapi.json` |
+| Release gate for retired claims | `release_assert.py` |
+| Implementer guide and FAQ | `docs/` |
+| Changelog and citation metadata | `CHANGELOG.md`, `CITATION.cff` |
+| LTI 1.3 + AGS integration contract | described in the specification |
 
-See [The open / hosted boundary](#the-open--hosted-boundary) below for why.
+**Roadmap, not in this release:** the interoperability adapters — xAPI, CLR / Open Badges,
+Common Cartridge, CTDL, European Learning Model.
 
-The JSON Schema, OpenAPI contract, and interoperability adapters — xAPI, 
-CLR / Open Badges, Canvas, Common Cartridge — are on the roadmap and will be 
-published alongside the hosted API. See [Roadmap](#roadmap) below.
+**Not in this repository at all:** scoring logic, dimension formulas, signal weights, tier
+thresholds, classifier code, and prompt templates. Those are operated as a hosted service
+by Answer Labs Inc. See [The open / hosted boundary](#the-open--hosted-boundary).
 
 ---
 
 ## Why this exists
 
-The credential gap in AI-mediated education has two forms. First, existing credentials measure what a person has been exposed to — courses completed, quizzes passed — not how they think when working with AI. A student who critically interrogates every AI output and one who passively accepts the first answer can receive identical credentials. Second, no existing standard specifies what behavioral evidence of AI-mediated learning should look like as machine-readable data. Every validated AI literacy instrument relies on self-report, which cannot scale to the volume of AI-assisted work now common in higher education and the workplace.
+Conventional educational records usually preserve outcomes, completion states, grades or
+assessment results rather than the sequence and context of the learner–AI interaction that
+contributed to an activity. Two learners may produce similar outputs while interacting with
+generative AI in materially different ways, and ordinary records need not preserve that
+distinction.
 
-SLPT addresses both gaps by specifying (a) what counts as a qualifying learning event, (b) what behavioral signals are observable from the event, and (c) how those signals serialize into a portable record. The specification is intentionally narrow: five permanent dimensions, one schema, clear context rules. Narrowness is the source of its durability — it defines only what will remain relevant as AI capability advances, not what is merely interesting today.
+Validated AI-literacy instruments in the comparison set use either self-report scales, for
+example MAILS and SNAIL, or objective and contrived tests, for example AICOS. **AICOS is an
+objective multiple-choice instrument, not a self-report scale.** Within the search frame
+reported with the accompanying SoftwareX article, no psychometrically validated instrument
+was identified whose reported score is derived directly from authentic, naturalistic
+learner–AI interaction traces.
 
-The specification is also compliance infrastructure. The EU AI Act categorizes AI systems used in education as high-risk and requires record-keeping (Article 12) and transparency (Article 13). SLPT's LPR serves as that audit trail. Institutions need this kind of provenance regardless of which platform they use; the open specification gives them a vendor-neutral target.
+SLPT addresses a record-structure gap: it specifies what counts as a qualifying learning
+event, what is observable from it, and how that serializes into a portable record. It does
+**not** claim that interaction traces are superior to conventional assessment, that
+existing credentials have ceased to be informative, or that recorded values validly
+measure cognition.
+
+The dimensions are revisable on evidence (§3 Principle 4). The construct model is
+unvalidated and the validation programme must be free to merge, rename or delete any of
+them.
+
+### On regulation
+
+Where a deployment falls under Annex III point 3(b) of the EU AI Act, the LPR contains
+fields that **may support** provider record-keeping (Article 12) and transparency to
+deployers (Article 13) workflows. Query-text hashing and the prohibition on plaintext
+persistence reduce the learner content retained in a record and may support institutional
+privacy and data-minimisation requirements.
+
+**Schema conformance does not establish legal compliance.** Whether a given deployment
+satisfies the AI Act, FERPA, GDPR or any other instrument depends on the scoring service,
+the institutional workflow and the applicable legal role. SLPT is compliance-supporting
+infrastructure, not a compliance mechanism.
 
 ---
 
 ## Getting started
 
-SLPT v1.0 is a specification release. No tooling installation is required
-to read, implement, or reference the standard.
+**Read the specification.** `spec/SLPT-AIQ-v1.2.md`. Start with §1.5, the four-claim
+boundary, then §6.4, the cross-field conformance rules. Where the specification text and
+the JSON Schema disagree, **the schema is normative for record conformance.**
 
-**Read the specification**
+**Validate a record.** From the repository root:
 
-The full SLPT-AIQ-v1.0 specification is in `spec/SLPT-AIQ-v1.0.md`. Start there to understand the five dimensions, qualifying event definitions, and the Learning Provenance Record structure.
+```
+pip install jsonschema
+python3 conformance/slpt_validate.py conformance/tests/valid_minimal.json --schema schema/lpr_v1.2.0.json
+python3 conformance/slpt_validate.py --run-corpus --schema schema/lpr_v1.2.0.json
+python3 release_assert.py .
+```
 
-**Read the implementer guide**
+The corpus contains 71 fixtures, 17 positive and 54 negative. A negative fixture
+reproduces its expected outcome by being *rejected*: each was built from a conformant base
+record by introducing one targeted violation. Class totals and per-fixture results are in
+`CONFORMANCE_MANIFEST.md` and its JSON sibling, together with the toolchain versions and
+the SHA-256 of the schema, validator and specification.
 
-If you are deploying Answerr at your institution or integrating via LTI 1.3, start with `docs/IMPLEMENTER_GUIDE.md`.
-
-**Request API access**
-
-The hosted scoring API is operational and currently available to selected institutional partners. To request access or discuss integration,
-contact tech@answerr.ai.
-
-The JSON Schema, validator, adapters, and OpenAPI contract will be published
-in a subsequent release alongside the hosted API.
+**Integrate.** If you are deploying Answerr at your institution or integrating via
+LTI 1.3, start with `docs/IMPLEMENTER_GUIDE.md`. For hosted scoring API access, contact
+tech@answerr.ai.
 
 ---
 
-## What's in v1.0
-
-### The five permanent dimensions
-
-| Dimension | What it measures |
-|---|---|
-| **Judgment Quality** | How critically a learner evaluates AI output — questioning, correcting, and strategically directing the AI rather than accepting responses at face value |
-| **Question Originality** | The degree to which a learner drives the inquiry — initiating conversations, framing problems, and demonstrating intellectual initiative |
-| **Discernment & Taste** | The ability to evaluate output quality across sources and models — distinguishing strong responses from adequate ones |
-| **Synthesis Under Ambiguity** | Coherent reasoning across conflicting or incomplete information — building deeper understanding through sustained reasoning chains |
-| **Learning Velocity & Adaptability** | How quickly a learner improves — recovering from setbacks and proactively refining their own work over time |
-
-Dimension weights are configurable at the institutional level, allowing universities and enterprise partners to adjust emphasis across dimensions to reflect their
-learning objectives. Default weights are operated as part of the hosted scoring service.
+## The record and the credential gate
 
 ### The Learning Provenance Record
 
-Each qualifying learning event produces a Learning Provenance Record (LPR) —  a structured, privacy-preserving object that captures four things:
+Each qualifying learning event produces an LPR: a structured, privacy-preserving object
+carrying the event context, the observable interaction features, the episode-level
+delegation annotation with its own uncertainty state, the identity of the scoring model
+and weighting configuration, the declared use and authorization status, dispute state and
+learner access, and the SHA-256 hash of the query text. **The plaintext never enters the
+record.** The complete field set, types and constraints are normative and defined in
+`schema/lpr_v1.2.0.json`.
 
-- The **event context** — where and under what institutional conditions the interaction occurred
-- The **learner's behavioral signals** — how the learner engaged with the AI, including whether they challenged, verified, refined or strategically directed 
-  the interaction
-- The **interaction quality classification** — the complexity, depth and Bloom's taxonomy level of the exchange
-- The **institutional trust level** — the verification tier under which the 
-  event was recorded
+Dimension estimates are nullable. A record can be structurally conformant while declining
+to assert any measurement.
 
-Query text is SHA-256-hashed. The plaintext never enters the record. The full LPR schema will be published alongside the hosted API.
+### Credential tiers are gated, not awarded
 
-### Credential tiers
+SLPT defines two credential tier identifiers, `AIQ_LEARNER` and `AIQ_CERTIFIED`, as values
+the `credential_tier` field may carry. **A tier is conformant only under rule R5** (§6.4):
+the record must declare `intended_use` as `credentialing`, carry a
+`use_authorization_status` of `conditionally_authorized` or `authorized`, and attach a
+populated `validation_status` naming the evidence, the population it was established on,
+and the context it covers.
 
-SLPT supports two credential tiers, both issued by Answer Labs Inc.:
+**No completed validation study is reported by the authors at this release, so the
+authors claim no current tier as validated.** Structurally, R5 permits a tier only where
+credentialing use, an authorization state and populated validation metadata are declared
+together. **Schema validation checks the consistency of that declaration; it does not
+establish evidential adequacy** — whether attached evidence actually supports the use is
+a governance determination, not a JSON Schema result.
 
-- **AIQ™ Learner** — awarded to any learner who meets the minimum activity
-  threshold on the Answerr platform. Shows a proficiency band across the
-  five SLPT dimensions — from Initializing through to Frontier. Signed by
-  Answer Labs Inc.
+No proficiency band, score interpretation or statement about learner capability is
+validated by this specification. Where an implementation issues tier identifiers outside
+the R5 gate, **those outputs are not SLPT-conformant credentials**, and no claim about
+learner competence follows from them here.
 
-- **AIQ™ Certified** — a co-signed credential issued jointly by Answer Labs Inc.
-  and the learner's institution or employer once they are an active Answerr
-  partner. Shows an exact score across all five SLPT dimensions. Carries
-  institutional authority alongside the Answer Labs Inc. signature.
-
-Both credentials can be generated directly through the Answerr platform or
-programmatically via the AIQ API, currently available to institutional partners
-on request. Contact tech@answerr.ai to discuss integration.
+Weighting configurations differ by institution and are disclosed to the deploying
+institution rather than published. **Estimates produced under different configurations are
+not comparable across institutions, and cross-institutional comparison is a non-permitted
+use.** Employment, hiring and selection use is not authorized (§11).
 
 ---
 
 ## The open / hosted boundary
 
-SLPT is published under Apache 2.0. The specification, LTI 1.3 integration,
-and implementer documentation are free to use, implement, and extend. Two parts
-of the system are operated as a hosted service rather than published as source:
-the dimension scoring engine and the institutional co-signature infrastructure.
-This section explains why.
+SLPT is published under Apache 2.0. The specification, JSON Schema, conformance harness,
+OpenAPI contract and implementer documentation are free to use, implement and extend. Two
+parts of the system are operated as a hosted service rather than published as source: the
+dimension scoring engine and the institutional co-signature infrastructure.
 
-**Why scoring is hosted.** The scoring layer translates raw behavioral signals
-into dimension scores and the AIQ™ credential. The hosted-service model
-allows scoring logic to improve continuously without invalidating previously
-issued credentials. This is the same pattern used by major model APIs: the
-inference improves over time, the contract stays stable.
+**Why scoring is hosted.** The scoring layer translates observable signals into dimension
+estimates. Hosting keeps the record contract stable while the implementation changes.
 
-**Why this is still open.** SLPT is an open standard — not a proprietary
-product. Publishing the specification allows universities, employers, and
-developers to build on a common framework, reference it in academic work,
-and trust that AIQ™ credentials mean the same thing regardless of which
-institution issued them. The scoring implementation is hosted by Answer
-Labs Inc. The standard itself belongs to the community.
+**What that costs, stated plainly.** A scorer informed by one generation of models drifts
+as those models change. Each scoring-model version is a new assessment form: comparability
+across versions requires anchor tasks, linking or equating evidence, and analysis of
+subgroup scale drift. Records carry the scoring-model version, the weight-configuration
+identity and the interaction epoch so that drift is detectable. **A version identifier
+establishes provenance, not comparability, and changing the scoring logic is not assumed
+to preserve the meaning of estimates already issued.**
 
-**Why institutional co-signature is hosted.** Both AIQ Learner and AIQ
-Certified credentials can carry an institutional co-signature once the
-institution is an active Answerr partner. This co-signature attests that
-learning events occurred within a governed institutional environment. It
-is not a software artifact — it is an institutional relationship. The
-hosted infrastructure manages those relationships on behalf of partner
-institutions.
+**Why this is still open.** Publishing the specification and the schema lets institutions
+and third-party implementers validate records without adopting the hosted service, and
+build independent scorers against the published dimension definitions. Every record names
+the scorer and configuration that produced it, so records from different implementations
+are **distinguishable**. They are not thereby comparable, and this repository makes no
+claim that a tier means the same thing across institutions.
 
-**What this means for compliance.** The EU AI Act Article 13 transparency
-requirement is satisfied by the published specification, the documented purpose
-and capabilities of the system, and the OpenAPI contract for the scoring
-endpoint available to institutional partners. The Act does not require disclosure
-of source code for the inference layer of high-risk AI systems. The Article 12
-record-keeping requirement is satisfied by the LPR structure, fully described
-in the specification. FERPA compliance is preserved by the query-text-hashing
-design specified in §6.1 of the specification.
+**Institutional co-signature** attests that events occurred within a governed institutional
+environment. It is an institutional relationship rather than a software artifact, and it
+does not lift any prohibition in §10 or §11.
+
+---
+
+## Deployment governance
+
+§12.4 of the specification is normative for deployments: an equivalent non-scored route or
+a documented necessity-and-proportionality basis; the deploying institution as authority of
+last resort for consequential disputes; suspension of evidence deletion while a dispute is
+open; correction or invalidation of a record where a dispute is upheld, since reassessment
+is not correction; and separation of formative estimates from summative judgment.
+
+**These rules define SLPT-conformant deployment behaviour. They do not assert that any
+existing deployment already satisfies them.** They are added prospectively at v1.2.0.
+
 ---
 
 ## Compatible standards
 
-SLPT is designed to interoperate with, not replace, existing learning-data
-infrastructure.
+SLPT is designed to interoperate with, not replace, existing learning-data infrastructure.
+**Interoperability with independent implementations is an intended system property that
+this release does not demonstrate**; it would require multi-implementation exchange
+testing.
 
-### Current integrations
-
-| Standard | Body | Use |
-|---|---|---|
-| **LTI 1.3 + AGS** | 1EdTech | Single sign-on and grade passback into Canvas, Moodle, Blackboard, and Brightspace |
-
-### Planned integrations
+### Current
 
 | Standard | Body | Use |
 |---|---|---|
-| xAPI 1.0.3 | ADL Initiative | Statement-based event transport into any Learning Record Store |
-| CLR 2.0 / Open Badges 3.0 | 1EdTech | Verifiable credentials, one per dimension plus composite |
-| cmi5 | ADL Initiative | xAPI profile for course completion and progress |
+| **LTI 1.3 + AGS** | 1EdTech | Single sign-on and grade passback into Canvas, Moodle, Blackboard, Brightspace. AGS is an available transport, not a permitted deployment: the reference connector rejects summative passback where use is prohibited or unvalidated. |
+
+### Roadmap
+
+| Standard | Body | Use |
+|---|---|---|
+| xAPI 1.0.3 | ADL Initiative | Statement-based event transport into a Learning Record Store |
+| CLR 2.0 / Open Badges 3.0 | 1EdTech | Verifiable credential packaging |
+| cmi5 | ADL Initiative | xAPI profile for completion and progress |
 | Common Cartridge 1.3 | 1EdTech | Course packaging with embedded provenance |
 | CTDL | Credential Engine | Machine-readable credential description |
-| European Learning Model | European Commission | EU-compatible learning record portability |
-
-### Compliance
-
-Answerr is certified or compliant with the following frameworks:
-
-| Framework | Scope |
-|---|---|
-| **FERPA** | Student data privacy — USA |
-| **SOC 2 Type II** | Security, availability, and confidentiality controls |
-| **GDPR** | Data protection and privacy — European Union |
-| **HIPAA** | Health information privacy standards |
-| **ISO 27001** | Information security management |
+| European Learning Model | European Commission | EU-compatible record portability |
 
 ---
 
 ## Citing this work
 
-If you reference SLPT in academic work, please cite both the specification and the underlying empirical foundation:
-
 ```
-Undheim, T. A., Malik, M. Qaiser, Hashmi, N. (2026). SLPT — Standard Learning Provenance Taxonomy
-for AI-Mediated Education, v1.0. Answer Labs Inc. DOI pending.
+Undheim, T. A., Malik, M. Qaiser, Hashmi, N. (2026). SLPT — Standard Learning
+Provenance Taxonomy for AI-Mediated Education, v1.2.0. Answer Labs Inc.
 
-Malik, M. Qaiser., & Undheim, T. A. (2025). AI infrastructure for trust and learning in
-education: The emergence of the 'Learning Provenance' concept. NEAIS 2025 Proceedings.
+Malik, M. Qaiser., & Undheim, T. A. (2025). AI infrastructure for trust and learning
+in education: The emergence of the 'Learning Provenance' concept. NEAIS 2025
+Proceedings. https://aisel.aisnet.org/neais2025/2
 ```
 
-A SoftwareX submission describing the schema, adapter ecosystem, and conformance tooling is in preparation.
+Machine-readable metadata is in `CITATION.cff`. A SoftwareX submission describing the
+schema, conformance tooling and claim boundary is under review.
 
 ---
-
 
 ## Repository layout
 
 ```
 slpt/
-├── spec/                       SLPT-AIQ-v1.0 specification
-├── docs/                       Implementer guide and FAQ
-├── LICENSE                     Apache 2.0
+├── spec/                       SLPT-AIQ-v1.2 specification
+├── schema/                     LPR JSON Schema, current and superseded versions
+├── conformance/                validator, 70-fixture corpus, test records
+├── api/                        OpenAPI contract for the hosted scoring endpoint
+├── docs/                       implementer guide and FAQ
+├── release_assert.py           release gate for retired claims
+├── build_manifest_v120.py      regenerates the conformance manifests
 ├── CHANGELOG.md
+├── CITATION.cff
 ├── CONTRIBUTING.md
 ├── CODE_OF_CONDUCT.md
+├── LICENSE                     Apache 2.0
 └── README.md                   (this file)
 ```
 
 ---
 
-## Roadmap
+## Governance
 
-| Milestone | Contents | Status |
-|---|---|---|
-| **v1.0** | Specification, LTI 1.3 integration, implementer documentation | This release |
-| **Hosted scoring API** | Public OpenAPI contract, JSON Schema | Available to partners on request |
-| **v1.1** | xAPI, CLR / Open Badges, Common Cartridge, CTDL, ELM | 2026–2027 |
-
-The SLPT Governance Council (composition described in §12 of the specification)
-governs all subsequent revisions. Major version changes require a 75% Council
-supermajority; minor versions require simple majority.
-
----
+The SLPT Governance Council, composition in §12.1 of the specification, governs revisions.
+Major version changes require a 75% Council supermajority; minor versions a simple
+majority. §12.2 defines what counts as major.
 
 ## Contributing
 
-We welcome:
-
-- Independent scorers built against the SLPT specification
-- Adapter contributions for additional standards
-- Translations of the specification document
-- Issues and clarification requests against the specification
-
-See `CONTRIBUTING.md` for the process. The specification document is governed
-conservatively — see §12 of the spec — and changes require Council review.
-
----
+Independent scorers built against the specification, adapter contributions, translations,
+and clarification requests are welcome. See `CONTRIBUTING.md`.
 
 ## License
 
-Apache License 2.0 — see [`LICENSE`](LICENSE). Specification text is also released under CC BY 4.0 for non-software reuse.
-
----
+Apache License 2.0 — see [`LICENSE`](LICENSE). Specification text is also released under
+CC BY 4.0 for non-software reuse.
 
 ## Contact
 
-For specification questions, institutional partnerships, API access,
-or press enquiries, contact **tech@answerr.ai**
-
-Answer Labs Inc. — Newark, Delaware, USA — [answerr.ai](https://answerr.ai)
+**tech@answerr.ai** — Answer Labs Inc., Newark, Delaware, USA — [answerr.ai](https://answerr.ai)

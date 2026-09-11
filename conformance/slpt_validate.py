@@ -19,9 +19,15 @@ except ImportError:
 H = hashlib.sha256(b"illustrative").hexdigest()
 D = "sha256:" + H
 
+EVIDENCE = {
+    "validation_evidence_uri": "https://example.org/slpt/validation-report",
+    "validation_population": "undergraduate, single institution, n=0 (illustrative)",
+    "validation_context": "formative feedback"
+}
+
 BASE = {
     "record_id": "9c2e1a6f-3b8d-4f47-a1e7-2c8b9d0e5f30",
-    "record_version": "1.1.0",
+    "record_version": "1.2.0",
     "platform_id": "answerr_v3.2",
     "session_id": "sess_b51e2c",
     "timestamp_utc": "2026-05-19T14:32:18Z",
@@ -76,6 +82,18 @@ def drop(d, *path):
     return d
 
 
+def drop(rec, *path):
+    """Delete a key entirely. Absence and null are different failures. R3 shipped
+    unenforced for omission precisely because its only fixture set null, and BASE
+    carries task_frame, so the fixture never exercised the missing-property case."""
+    r = json.loads(json.dumps(rec))
+    t = r
+    for k in path[:-1]:
+        t = t[k]
+    t.pop(path[-1], None)
+    return r
+
+
 def setv(d, value, *path):
     d = copy.deepcopy(d)
     t = d
@@ -93,15 +111,24 @@ def corpus():
     C.append(("P02", True, "optional institution_id omitted", drop(BASE, "institution_id")))
     C.append(("P03", True, "boundary scores at 0.0 and 1.0 accepted",
               setv(setv(BASE, 0.0, "dimension_estimates", "jq"), 1.0, "dimension_estimates", "ad")))
-    C.append(("P04", True, "AIQ_LEARNER tier accepted", setv(BASE, "AIQ_LEARNER", "credential_tier")))
+    C.append(("P04", True, "R5 future path: tier + credentialing + conditionally_authorized + populated evidence",
+              setv(setv(setv(setv(BASE, "AIQ_LEARNER", "credential_tier"),
+                             "credentialing", "intended_use"),
+                        "conditionally_authorized", "use_authorization_status"),
+                   EVIDENCE, "validation_status")))
     C.append(("P04b", True, "null credential_tier accepted (v1.1)", setv(BASE, None, "credential_tier")))
     C.append(("P04c", True, "null dimension_estimates accepted (v1.1)", setv(BASE, None, "dimension_estimates")))
     for ct in ["TUTOR", "ASSISTANT", "QUIZ", "ASSIGNMENT", "REFLECTION"]:
         C.append((None, True, f"context_type {ct} accepted", setv(BASE, ct, "context_type")))
     C.append((None, True, "uppercase hex hash accepted", setv(BASE, H.upper(), "query_text_hash")))
     # v1.1 cross-field and new-field positives
-    C.append((None, True, "credentialing use with unvalidated status permitted",
+    C.append((None, True, "credentialing use with unvalidated status and null tier permitted",
               setv(setv(BASE, "credentialing", "intended_use"), "unvalidated", "use_authorization_status")))
+    C.append((None, True, "dispute upheld for the learner with the record invalidated",
+              setv(BASE, {"state": "upheld", "opened_at_utc": "2026-06-01T09:00:00Z",
+                          "resolved_at_utc": "2026-06-10T09:00:00Z", "adjudicator": "institution",
+                          "outcome": "upheld_for_learner", "record_action": "invalidated",
+                          "trace_available_for_review": True}, "dispute_status")))
     C.append((None, True, "adjudicated dispute with trace unavailable",
               setv(BASE, {"state": "rejected", "raised_at_utc": "2026-06-01T09:00:00Z",
                           "adjudicator": "answer_labs", "trace_available_for_review": False},
@@ -157,13 +184,16 @@ def corpus():
          setv(BASE, 0.5, "dimension_estimates", "xx")),
         ("plaintext query leaked into record",
          setv(BASE, "How do I reconcile these accounts?", "query_text")),
-        ("R1: credentialing use asserted as authorized",
+        ("R1: credentialing use asserted as authorized without validation evidence",
          setv(setv(BASE, "credentialing", "intended_use"), "authorized", "use_authorization_status")),
-        ("R1: summative assessment asserted as authorized",
+        ("R1: summative assessment asserted as authorized without validation evidence",
          setv(setv(BASE, "summative_assessment", "intended_use"), "authorized", "use_authorization_status")),
         ("R2: authorized status without validation_status evidence",
          setv(BASE, "authorized", "use_authorization_status")),
-        ("R3: delegation state relative to an absent task_frame",
+        ("R3: delegation state relative to an OMITTED task_frame",
+         drop(setv(BASE, "inconsistent_with_task_frame", "delegation_annotation", "state"),
+              "task_frame")),
+        ("R3: delegation state relative to a null task_frame",
          setv(BASE, "inconsistent_with_task_frame", "delegation_annotation", "state")),
         ("R4: open dispute on a record the learner cannot read",
          setv(setv(BASE, False, "learner_access"), {"state": "open"}, "dispute_status")),
@@ -173,6 +203,28 @@ def corpus():
          setv(BASE, "none", "dispute_status")),
         ("conformance_suite_version fails semver pattern",
          setv(BASE, "v1", "scoring_model", "conformance_suite_version")),
+        ("R5: tier asserted with formative use",
+         setv(BASE, "AIQ_LEARNER", "credential_tier")),
+        ("R5: tier asserted with credentialing use left unvalidated",
+         setv(setv(setv(BASE, "AIQ_CERTIFIED", "credential_tier"), "credentialing", "intended_use"),
+              "unvalidated", "use_authorization_status")),
+        ("R5: tier asserted with credentialing use prohibited",
+         setv(setv(setv(BASE, "AIQ_CERTIFIED", "credential_tier"), "credentialing", "intended_use"),
+              "prohibited", "use_authorization_status")),
+        ("R5: tier authorized but no validation evidence attached",
+         setv(setv(setv(BASE, "AIQ_CERTIFIED", "credential_tier"), "credentialing", "intended_use"),
+              "authorized", "use_authorization_status")),
+        ("R5: tier authorized with an empty validation_status object",
+         setv(setv(setv(setv(BASE, "AIQ_CERTIFIED", "credential_tier"), "credentialing", "intended_use"),
+                   "authorized", "use_authorization_status"), {}, "validation_status")),
+        ("R1: summative use asserted as authorized with an empty validation_status object",
+         setv(setv(setv(BASE, "summative_assessment", "intended_use"), "authorized",
+                   "use_authorization_status"), {}, "validation_status")),
+        ("R6: dispute upheld for the learner with no action on the record",
+         setv(BASE, {"state": "upheld", "adjudicator": "institution",
+                     "outcome": "upheld_for_learner", "record_action": "none"}, "dispute_status")),
+        ("dispute_status.record_action not in enum",
+         setv(BASE, {"state": "open", "record_action": "rescored"}, "dispute_status")),
     ]
     for i, (label, inst) in enumerate(N, 1):
         C.append((f"N{i:02d}", False, label, inst))
@@ -209,7 +261,7 @@ def run(schema, verbose=True):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("record", nargs="?")
-    ap.add_argument("--schema", default="schema/lpr_v1.1.0.json")
+    ap.add_argument("--schema", default="schema/lpr_v1.2.0.json")
     ap.add_argument("--run-corpus", action="store_true")
     a = ap.parse_args()
     schema = json.load(open(a.schema))

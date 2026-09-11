@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "AIQ Credential API",
-    "version": "1.0.0",
-    "description": "Answer Labs Inc. AIQ credential scoring API. Available to institutional partners on request. Contact tech@answerr.ai to discuss access.",
+    "title": "AIQ Scoring API (Answer Labs proprietary product object)",
+    "version": "1.2.0",
+    "description": "Answer Labs Inc. hosted AIQ scoring endpoint. Available to institutional partners on request.\n\nBOUNDARY, NORMATIVE. The AIQResponse object returned by this endpoint is a proprietary product object. It is NOT a Learning Provenance Record and it is NOT an SLPT-conformant record. It does not carry intended_use, use_authorization_status or validation_status, and it therefore cannot express, satisfy or establish the credential gate in rule R5 of schema/lpr_v1.2.0.json. A response from this endpoint establishes nothing about SLPT conformance.\n\nSLPT conformance is determined only by validating a Learning Provenance Record against schema/lpr_v1.2.0.json. Where a platform serialises an LPR from data returned here, that LPR is subject to R1-R6 in its own right, and a credential_tier in it is conformant only where credentialing use has reached a validation-gated authorization state with populated evidence attached. No completed validation study exists at this release.\n\nThe vocabulary below is the product vocabulary and deliberately differs from the schema: dimension_scores here is not dimension_estimates in the LPR, and aiq_credential and proficiency_band have no counterpart in the schema and carry no validated interpretation. Contact tech@answerr.ai to discuss access.\n\nThe path name /v1/slpt/aiq is a product endpoint name. It does not imply that AIQResponse is SLPT-conformant.",
     "contact": {
       "email": "tech@answerr.ai"
     }
@@ -11,14 +11,14 @@
   "servers": [
     {
       "url": "https://api.answerr.ai/AIQ",
-      "description": "Production — available to institutional partners on request"
+      "description": "Production \u2014 available to institutional partners on request"
     }
   ],
   "paths": {
     "/v1/slpt/aiq": {
       "post": {
-        "summary": "Score a learner session and generate an AIQ credential",
-        "description": "Accepts institutional configuration and session data. Returns a scored AIQ credential across the five SLPT dimensions.",
+        "summary": "Score a learner session and return a proprietary AIQ product object",
+        "description": "Returns an AIQResponse. This is a product object, not a Learning Provenance Record, and not an SLPT-conformant credential. See the boundary statement in info.description.",
         "requestBody": {
           "required": true,
           "content": {
@@ -28,14 +28,14 @@
               },
               "example": {
                 "university_id": "institution_001",
-                "api_key": "••••••••••••••••",
+                "api_key": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
                 "config": {
                   "weights": {
                     "JQ": "configurable",
                     "QO": "configurable",
-                    "DT": "configurable",
+                    "SOD": "configurable",
                     "SA": "configurable",
-                    "LV": "configurable"
+                    "AD": "configurable"
                   },
                   "token_thresholds": {
                     "learner": "configurable",
@@ -62,7 +62,7 @@
         },
         "responses": {
           "200": {
-            "description": "AIQ credential successfully generated",
+            "description": "AIQResponse returned. Not an LPR; establishes no SLPT conformance.",
             "content": {
               "application/json": {
                 "schema": {
@@ -74,28 +74,29 @@
                   "dimension_scores": {
                     "JQ": 71,
                     "QO": 58,
-                    "DT": 62,
+                    "SOD": 62,
                     "SA": 69,
-                    "LV": 55
+                    "AD": 55
                   },
                   "proficiency_band": "Developing",
                   "credential_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
                   "issued_at": "2026-05-19T02:30:00Z",
                   "valid_until": "2026-08-19T02:30:00Z",
                   "institution_name": "Institution name",
-                  "methodology_id": "SLPT-AIQ-v1.0-hosted"
+                  "methodology_id": "SLPT-AIQ-v1.2-hosted",
+                  "_note": "proficiency_band above is NOT VALIDATED and this object is not an SLPT-conformant credential."
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid request — missing required fields or malformed payload"
+            "description": "Invalid request \u2014 missing required fields or malformed payload"
           },
           "401": {
-            "description": "Unauthorized — invalid or missing API key"
+            "description": "Unauthorized \u2014 invalid or missing API key"
           },
           "403": {
-            "description": "Forbidden — institution not authorized for this endpoint"
+            "description": "Forbidden \u2014 institution not authorized for this endpoint"
           },
           "429": {
             "description": "Rate limit exceeded"
@@ -111,7 +112,12 @@
     "schemas": {
       "AIQRequest": {
         "type": "object",
-        "required": ["university_id", "api_key", "config", "session"],
+        "required": [
+          "university_id",
+          "api_key",
+          "config",
+          "session"
+        ],
         "properties": {
           "university_id": {
             "type": "string",
@@ -124,33 +130,66 @@
           "config": {
             "type": "object",
             "description": "Institutional configuration for this scoring request.",
-            "required": ["weights", "token_thresholds", "passing_scores", "lock_period_days", "branding"],
+            "required": [
+              "weights",
+              "token_thresholds",
+              "passing_scores",
+              "lock_period_days",
+              "branding"
+            ],
             "properties": {
               "weights": {
                 "type": "object",
                 "description": "Dimension weights configurable at the institutional level. Contact tech@answerr.ai to discuss configuration.",
                 "properties": {
-                  "JQ": { "type": "string", "description": "Judgment Quality weight — configurable" },
-                  "QO": { "type": "string", "description": "Question Originality weight — configurable" },
-                  "DT": { "type": "string", "description": "Discernment and Taste weight — configurable" },
-                  "SA": { "type": "string", "description": "Synthesis Under Ambiguity weight — configurable" },
-                  "LV": { "type": "string", "description": "Learning Velocity weight — configurable" }
+                  "JQ": {
+                    "type": "string",
+                    "description": "Judgment Quality weight \u2014 configurable"
+                  },
+                  "QO": {
+                    "type": "string",
+                    "description": "Question Originality weight \u2014 configurable"
+                  },
+                  "SOD": {
+                    "type": "string",
+                    "description": "Source and Output Discernment weight \u2014 configurable, disclosed to the deploying institution"
+                  },
+                  "SA": {
+                    "type": "string",
+                    "description": "Synthesis Under Ambiguity weight \u2014 configurable"
+                  },
+                  "AD": {
+                    "type": "string",
+                    "description": "Adaptability weight \u2014 configurable, never applied to elapsed time"
+                  }
                 }
               },
               "token_thresholds": {
                 "type": "object",
                 "description": "Minimum token usage thresholds for each credential tier. Configurable by institutional partners.",
                 "properties": {
-                  "learner": { "type": "string", "description": "Token threshold for AIQ Learner — configurable" },
-                  "certified": { "type": "string", "description": "Token threshold for AIQ Certified — configurable" }
+                  "learner": {
+                    "type": "string",
+                    "description": "Token threshold for AIQ Learner \u2014 configurable"
+                  },
+                  "certified": {
+                    "type": "string",
+                    "description": "Token threshold for AIQ Certified \u2014 configurable"
+                  }
                 }
               },
               "passing_scores": {
                 "type": "object",
                 "description": "Minimum passing scores for each credential tier. Configurable by institutional partners.",
                 "properties": {
-                  "learner": { "type": "string", "description": "Passing score for AIQ Learner — configurable" },
-                  "certified": { "type": "string", "description": "Passing score for AIQ Certified — configurable" }
+                  "learner": {
+                    "type": "string",
+                    "description": "Passing score for AIQ Learner \u2014 configurable"
+                  },
+                  "certified": {
+                    "type": "string",
+                    "description": "Passing score for AIQ Certified \u2014 configurable"
+                  }
                 }
               },
               "lock_period_days": {
@@ -177,7 +216,11 @@
           "session": {
             "type": "object",
             "description": "Session data for the learner being scored.",
-            "required": ["student_id", "course_id", "tokens_used"],
+            "required": [
+              "student_id",
+              "course_id",
+              "tokens_used"
+            ],
             "properties": {
               "student_id": {
                 "type": "string",
@@ -200,35 +243,70 @@
         "properties": {
           "credential_tier": {
             "type": "string",
-            "enum": ["AIQ_LEARNER", "AIQ_CERTIFIED"],
-            "description": "Credential tier awarded to the learner."
+            "enum": [
+              "AIQ_LEARNER",
+              "AIQ_CERTIFIED"
+            ],
+            "description": "Credential tier awarded to the learner. PROPRIETARY PRODUCT VALUE: no validated interpretation, and not an LPR field."
           },
           "aiq_credential": {
             "type": "number",
             "minimum": 0,
             "maximum": 100,
-            "description": "Composite AIQ credential score across the five SLPT dimensions."
+            "description": "Composite AIQ credential score across the five SLPT dimensions. PROPRIETARY PRODUCT VALUE: no validated interpretation, and not an LPR field."
           },
           "dimension_scores": {
             "type": "object",
-            "description": "Individual scores across the five SLPT dimensions.",
+            "description": "Individual scores across the five SLPT dimensions. PROPRIETARY PRODUCT VALUE: no validated interpretation, and not an LPR field.",
             "properties": {
-              "JQ": { "type": "number", "minimum": 0, "maximum": 100, "description": "Judgment Quality score" },
-              "QO": { "type": "number", "minimum": 0, "maximum": 100, "description": "Question Originality score" },
-              "DT": { "type": "number", "minimum": 0, "maximum": 100, "description": "Discernment and Taste score" },
-              "SA": { "type": "number", "minimum": 0, "maximum": 100, "description": "Synthesis Under Ambiguity score" },
-              "LV": { "type": "number", "minimum": 0, "maximum": 100, "description": "Learning Velocity score" }
+              "JQ": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "Judgment Quality score"
+              },
+              "QO": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "Question Originality score"
+              },
+              "SOD": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "Source and Output Discernment estimate"
+              },
+              "SA": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "Synthesis Under Ambiguity score"
+              },
+              "AD": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "Adaptability estimate"
+              }
             }
           },
           "proficiency_band": {
             "type": "string",
-            "enum": ["Initializing", "Base", "Developing", "Capable", "Advanced", "Frontier"],
-            "description": "Proficiency band label for AIQ Learner credentials."
+            "enum": [
+              "Initializing",
+              "Base",
+              "Developing",
+              "Capable",
+              "Advanced",
+              "Frontier"
+            ],
+            "description": "Product band label. NOT VALIDATED: no completed validation study supports any band interpretation, and this object is not an SLPT-conformant credential. See info.description. PROPRIETARY PRODUCT VALUE: no validated interpretation, and not an LPR field."
           },
           "credential_id": {
             "type": "string",
             "format": "uuid",
-            "description": "Unique identifier for the issued credential."
+            "description": "Unique identifier for the issued credential. PROPRIETARY PRODUCT VALUE: no validated interpretation, and not an LPR field."
           },
           "issued_at": {
             "type": "string",
@@ -246,7 +324,7 @@
           },
           "methodology_id": {
             "type": "string",
-            "description": "Identifier of the scoring methodology version used. See §3 Principle 5 of the SLPT specification."
+            "description": "Identifier of the scoring methodology version used. See \u00a73 Principle 5 of the SLPT specification."
           }
         }
       }
